@@ -7,6 +7,49 @@ import {
 } from "react-simple-maps";
 import indiaTopo from "@/assets/geo/india.json";
 
+// Force the states layer (not districts) to keep the map clean
+const indiaStates = {
+  ...(indiaTopo as any),
+  objects: { states: (indiaTopo as any).objects.states },
+};
+
+// Group states into colored regions for visual distinction
+const REGION_COLORS: Record<string, string> = {
+  north: "oklch(0.72 0.13 50)",   // warm amber
+  south: "oklch(0.62 0.13 165)",  // teal green
+  east:  "oklch(0.6 0.14 280)",   // indigo
+  west:  "oklch(0.68 0.15 30)",   // coral
+  ne:    "oklch(0.66 0.14 130)",  // lime
+  central: "oklch(0.7 0.1 90)",   // muted gold
+};
+
+const STATE_REGION: Record<string, keyof typeof REGION_COLORS> = {
+  // North
+  "Jammu & Kashmir": "north", "Ladakh": "north", "Himachal Pradesh": "north",
+  "Punjab": "north", "Haryana": "north", "Delhi": "north", "Uttarakhand": "north",
+  "Uttar Pradesh": "north", "Rajasthan": "north", "Chandigarh": "north",
+  // West
+  "Gujarat": "west", "Maharashtra": "west", "Goa": "west",
+  "Dadra and Nagar Haveli": "west", "Daman & Diu": "west",
+  // Central
+  "Madhya Pradesh": "central", "Chhattisgarh": "central", "Jharkhand": "central",
+  // East
+  "Bihar": "east", "West Bengal": "east", "Odisha": "east", "Sikkim": "east",
+  // North East
+  "Assam": "ne", "Arunachal Pradesh": "ne", "Nagaland": "ne", "Manipur": "ne",
+  "Mizoram": "ne", "Tripura": "ne", "Meghalaya": "ne",
+  // South
+  "Andhra Pradesh": "south", "Telangana": "south", "Karnataka": "south",
+  "Kerala": "south", "Tamil Nadu": "south", "Puducherry": "south",
+  "Andaman & Nicobar Island": "south", "Lakshadweep": "south",
+};
+
+const colorForState = (name?: string) => {
+  if (!name) return REGION_COLORS.central;
+  const region = STATE_REGION[name];
+  return region ? REGION_COLORS[region] : REGION_COLORS.central;
+};
+
 interface Location {
   name: string;
   /** [longitude, latitude] */
