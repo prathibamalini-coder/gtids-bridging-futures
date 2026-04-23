@@ -97,13 +97,13 @@ function ServicesPage() {
   return (
     <>
       <PageHero
-        eyebrow="Our Offerings"
+        eyebrow="Our Services"
         title="A complete ecosystem for inclusive finance and livelihoods."
         description="Our services go beyond basic banking access — focusing on sustained usage, economic participation, and long-term impact."
       />
 
       {/* Desktop & tablet: Numbered card grid with hover expand */}
-      <section className="container-prose pb-12 hidden md:block">
+      <section className="container-prose pb-8 hidden md:block">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
           {services.map((s, i) => (
             <ServiceCard key={s.title} index={i} service={s} />
@@ -112,7 +112,7 @@ function ServicesPage() {
       </section>
 
       {/* Mobile: Accordion */}
-      <section className="container-prose pb-16 md:hidden">
+      <section className="container-prose pb-12 md:hidden">
         <ServiceAccordion services={services} />
       </section>
     </>
