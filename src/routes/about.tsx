@@ -220,7 +220,7 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* 3. IMPACT IN CIRCLES */}
+      {/* 3. IMPACT — animated counters + 3D India map */}
       <section id="impact" className="gradient-soft py-12 md:py-16 border-y border-border">
         <div className="container-prose">
           <div className="text-center max-w-2xl mx-auto">
@@ -230,28 +230,21 @@ function AboutPage() {
             <h2 className="mt-3 font-display text-3xl md:text-4xl lg:text-5xl text-foreground text-balance">
               Measurable change, at the scale of a nation.
             </h2>
+            <p className="mt-3 text-muted-foreground">
+              A pan-India footprint built one village, one beneficiary at a time.
+            </p>
           </div>
-          <div className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
-            {impact.map(({ icon: Icon, value, label, suffix }) => (
-              <div key={label} className="flex flex-col items-center text-center">
-                <div className="relative">
-                  <div className="grid h-36 w-36 md:h-44 md:w-44 place-items-center rounded-full gradient-circle text-white shadow-elevated transition-transform hover:scale-105">
-                    <div className="text-center px-3">
-                      <Icon className="mx-auto h-6 w-6 md:h-7 md:w-7 opacity-80" />
-                      <div className="mt-2 font-display text-2xl md:text-3xl leading-none">
-                        {value}
-                      </div>
-                      {suffix && (
-                        <div className="mt-1 text-[11px] uppercase tracking-wider opacity-90">
-                          {suffix}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-5 text-sm md:text-base font-medium text-foreground">{label}</div>
-              </div>
+
+          {/* Animated counter circles */}
+          <div className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+            {impact.map((stat) => (
+              <ImpactStatCard key={stat.label} stat={stat} />
             ))}
+          </div>
+
+          {/* 3D India map with active state dots */}
+          <div className="mt-14 md:mt-16">
+            <IndiaImpactMap />
           </div>
         </div>
       </section>
