@@ -111,18 +111,13 @@ export function IndiaImpactMap() {
             style={{ width: "100%", height: "auto", display: "block" }}
           >
             <defs>
-              <linearGradient id="stateFill" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="oklch(0.55 0.12 165)" />
-                <stop offset="55%" stopColor="oklch(0.42 0.1 175)" />
-                <stop offset="100%" stopColor="oklch(0.32 0.08 220)" />
-              </linearGradient>
               <filter id="stateShadow" x="-10%" y="-10%" width="120%" height="120%">
                 <feDropShadow
                   dx="0"
-                  dy="10"
-                  stdDeviation="10"
+                  dy="6"
+                  stdDeviation="6"
                   floodColor="oklch(0.32 0.08 220)"
-                  floodOpacity="0.4"
+                  floodOpacity="0.25"
                 />
               </filter>
               <radialGradient id="dotGlow" cx="50%" cy="50%" r="50%">
@@ -132,30 +127,35 @@ export function IndiaImpactMap() {
             </defs>
 
             <g filter="url(#stateShadow)">
-              <Geographies geography={indiaTopo}>
+              <Geographies geography={indiaStates}>
                 {({ geographies }) =>
-                  geographies.map((geo) => (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      style={{
-                        default: {
-                          fill: "url(#stateFill)",
-                          stroke: "oklch(1 0 0 / 0.35)",
-                          strokeWidth: 0.6,
-                          outline: "none",
-                        },
-                        hover: {
-                          fill: "oklch(0.5 0.13 195)",
-                          stroke: "oklch(1 0 0 / 0.6)",
-                          strokeWidth: 0.8,
-                          outline: "none",
-                          cursor: "pointer",
-                        },
-                        pressed: { fill: "oklch(0.42 0.12 200)", outline: "none" },
-                      }}
-                    />
-                  ))
+                  geographies.map((geo) => {
+                    const name = geo.properties?.st_nm as string | undefined;
+                    const fill = colorForState(name);
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        style={{
+                          default: {
+                            fill,
+                            stroke: "oklch(1 0 0 / 0.85)",
+                            strokeWidth: 0.7,
+                            strokeLinejoin: "round",
+                            outline: "none",
+                          },
+                          hover: {
+                            fill: "oklch(0.55 0.16 60)",
+                            stroke: "oklch(1 0 0)",
+                            strokeWidth: 1,
+                            outline: "none",
+                            cursor: "pointer",
+                          },
+                          pressed: { fill, outline: "none" },
+                        }}
+                      />
+                    );
+                  })
                 }
               </Geographies>
             </g>
