@@ -395,3 +395,49 @@ function AboutPage() {
     </>
   );
 }
+
+function ImpactStatCard({ stat }: { stat: ImpactStat }) {
+  const { icon: Icon, end, format, suffix, label } = stat;
+  const [value, ref] = useCountUp(end, { duration: 2000 });
+
+  return (
+    <div
+      ref={ref as React.RefObject<HTMLDivElement>}
+      className="flex flex-col items-center text-center"
+    >
+      <div className="relative">
+        {/* 3D depth shadow under the orb */}
+        <div
+          aria-hidden
+          className="absolute inset-x-3 -bottom-2 h-6 rounded-[50%] blur-xl opacity-60"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, oklch(0.36 0.07 158 / 0.55), transparent 70%)",
+          }}
+        />
+        <div
+          className="relative grid h-36 w-36 md:h-44 md:w-44 place-items-center rounded-full text-white transition-transform hover:scale-105"
+          style={{
+            background:
+              "linear-gradient(135deg, oklch(0.45 0.12 230) 0%, oklch(0.4 0.1 195) 50%, oklch(0.36 0.07 158) 100%)",
+            boxShadow:
+              "0 18px 36px -12px oklch(0.36 0.07 158 / 0.55), inset 0 2px 0 0 oklch(1 0 0 / 0.25), inset 0 -4px 10px 0 oklch(0 0 0 / 0.2)",
+          }}
+        >
+          <div className="text-center px-3">
+            <Icon className="mx-auto h-6 w-6 md:h-7 md:w-7 opacity-85" />
+            <div className="mt-2 font-display text-2xl md:text-3xl leading-none tabular-nums">
+              {format(value)}
+            </div>
+            {suffix && (
+              <div className="mt-1 text-[11px] uppercase tracking-wider opacity-90">
+                {suffix}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="mt-5 text-sm md:text-base font-medium text-foreground">{label}</div>
+    </div>
+  );
+}
