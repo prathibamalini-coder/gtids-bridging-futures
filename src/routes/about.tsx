@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import aboutHero from "@/assets/about-hero.jpg";
 import aboutSplit from "@/assets/about-split.jpg";
+import { IndiaImpactMap } from "@/components/site/IndiaImpactMap";
+import { useCountUp } from "@/hooks/use-count-up";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
