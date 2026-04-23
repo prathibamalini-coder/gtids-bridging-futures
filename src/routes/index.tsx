@@ -127,9 +127,9 @@ function HomePage() {
           }}
         />
 
-        <div className="container-prose py-24 md:py-32 lg:py-40 text-center">
+        <div className="container-prose py-16 md:py-24 lg:py-28 text-center">
           <span className="inline-block rounded-full bg-white/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white backdrop-blur ring-1 ring-white/20">
-            Our Offerings
+            Our Services
           </span>
           <h1 className="mt-6 mx-auto max-w-4xl font-display text-4xl md:text-6xl lg:text-7xl text-white text-balance leading-[1.05] animate-fade-up">
             A complete ecosystem for inclusive finance and livelihoods.
@@ -143,7 +143,7 @@ function HomePage() {
               href="#offerings"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground shadow-elevated transition-all hover:-translate-y-0.5"
             >
-              Explore Offerings <ArrowRight className="h-4 w-4" />
+              Explore Services <ArrowRight className="h-4 w-4" />
             </a>
             <Link
               to="/contact"
@@ -166,7 +166,7 @@ function HomePage() {
       {/* 2. OFFERINGS — Numbered card grid (2 × 4) with 3D tilt */}
       <section
         id="offerings"
-        className="relative scroll-mt-24 py-14 md:py-20"
+        className="relative scroll-mt-24 py-10 md:py-14"
         style={{
           background:
             "radial-gradient(ellipse at top, oklch(0.97 0.015 220) 0%, var(--background) 70%)",
@@ -191,15 +191,15 @@ function HomePage() {
         />
 
         <div className="container-prose relative">
-          <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
+          <div className="text-center max-w-2xl mx-auto mb-8 md:mb-10">
             <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-              Our 8 Offerings
+              Our 8 Services
             </span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl text-foreground text-balance">
               A complete suite for inclusive growth
             </h2>
             <p className="mt-3 text-muted-foreground text-base md:text-lg">
-              Each offering connects to the next — forming a single, end-to-end ecosystem.
+              Each service connects to the next — forming a single, end-to-end ecosystem.
             </p>
           </div>
 
@@ -257,7 +257,7 @@ function HomePage() {
 
                   <div className="relative mt-5">
                     <div className="text-[11px] font-bold tracking-[0.2em] text-accent">
-                      {pad(i)} · OFFERING
+                      {pad(i)} · SERVICE
                     </div>
                     <h3 className="mt-1.5 font-display text-lg md:text-xl text-foreground leading-snug">
                       {o.title}
@@ -274,7 +274,7 @@ function HomePage() {
       </section>
 
       {/* 3. FINAL CTA */}
-      <section className="container-prose pb-20 pt-2">
+      <section className="container-prose pb-12 pt-2">
         <div
           className="relative overflow-hidden rounded-3xl px-8 py-14 md:px-16 md:py-16 text-white shadow-elevated"
           style={{

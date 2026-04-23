@@ -6,7 +6,7 @@ interface PageHeroProps {
 
 export function PageHero({ eyebrow, title, description }: PageHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-primary-soft/40 via-background to-background pt-20 pb-16 md:pt-28 md:pb-20">
+    <section className="relative overflow-hidden bg-gradient-to-b from-primary-soft/40 via-background to-background pt-14 pb-10 md:pt-20 md:pb-14">
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 -z-10 h-72 opacity-40"

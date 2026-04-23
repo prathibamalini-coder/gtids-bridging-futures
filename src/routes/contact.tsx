@@ -32,7 +32,7 @@ function ContactPage() {
         title="We'd love to hear from you."
         description="Whether you are a partner, beneficiary, institution, or individual looking to collaborate, our team is here to assist you."
       />
-      <section className="container-prose pb-20 grid lg:grid-cols-5 gap-10">
+      <section className="container-prose pb-12 grid lg:grid-cols-5 gap-8">
         {/* Contact info */}
         <div className="lg:col-span-2 space-y-6">
           <div className="rounded-2xl border border-border bg-card p-7 shadow-soft">

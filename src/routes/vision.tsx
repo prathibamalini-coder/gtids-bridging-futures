@@ -27,7 +27,7 @@ function VisionPage() {
   return (
     <>
       <PageHero eyebrow="Our Vision" title="An inclusive and empowered society." />
-      <section className="container-prose pb-20 grid lg:grid-cols-5 gap-12 items-center">
+      <section className="container-prose pb-12 grid lg:grid-cols-5 gap-10 items-center">
         <div className="lg:col-span-3 order-2 lg:order-1">
           <blockquote className="font-display text-2xl md:text-3xl text-foreground leading-snug text-balance border-l-4 border-accent pl-6">
             To build an inclusive and empowered society where every rural and tribal household has
