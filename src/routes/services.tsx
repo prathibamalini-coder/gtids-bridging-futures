@@ -27,7 +27,8 @@ export const Route = createFileRoute("/services")({
       { property: "og:title", content: "Our Services — GTIDS" },
       {
         property: "og:description",
-        content: "A comprehensive suite of inclusive finance and livelihood services for rural India.",
+        content:
+          "A comprehensive suite of inclusive finance and livelihood services for rural India.",
       },
     ],
   }),
