@@ -44,11 +44,41 @@ export const Route = createFileRoute("/about")({
   component: AboutPage,
 });
 
-const impact = [
-  { icon: MapPin, value: "14", suffix: "States", label: "Pan-India footprint" },
-  { icon: Sprout, value: "25,000+", label: "Villages served" },
-  { icon: Users2, value: "1.6 Cr+", label: "Individuals reached" },
-  { icon: Wallet, value: "₹2,000 Cr+", label: "Savings mobilized" },
+interface ImpactStat {
+  icon: typeof MapPin;
+  end: number;
+  /** how to format the animated value back into the displayed string */
+  format: (n: number) => string;
+  suffix?: string;
+  label: string;
+}
+
+const impact: ImpactStat[] = [
+  {
+    icon: MapPin,
+    end: 14,
+    format: (n) => Math.round(n).toString(),
+    suffix: "States",
+    label: "Pan-India footprint",
+  },
+  {
+    icon: Sprout,
+    end: 25000,
+    format: (n) => `${Math.round(n).toLocaleString("en-IN")}+`,
+    label: "Villages served",
+  },
+  {
+    icon: Users2,
+    end: 1.6,
+    format: (n) => `${n.toFixed(1)} Cr+`,
+    label: "Individuals reached",
+  },
+  {
+    icon: Wallet,
+    end: 2000,
+    format: (n) => `₹${Math.round(n).toLocaleString("en-IN")} Cr+`,
+    label: "Savings mobilized",
+  },
 ];
 
 const livingLab = [
