@@ -7,6 +7,49 @@ import {
 } from "react-simple-maps";
 import indiaTopo from "@/assets/geo/india.json";
 
+// Force the states layer (not districts) to keep the map clean
+const indiaStates = {
+  ...(indiaTopo as any),
+  objects: { states: (indiaTopo as any).objects.states },
+};
+
+// Group states into colored regions for visual distinction
+const REGION_COLORS: Record<string, string> = {
+  north: "oklch(0.72 0.13 50)",   // warm amber
+  south: "oklch(0.62 0.13 165)",  // teal green
+  east:  "oklch(0.6 0.14 280)",   // indigo
+  west:  "oklch(0.68 0.15 30)",   // coral
+  ne:    "oklch(0.66 0.14 130)",  // lime
+  central: "oklch(0.7 0.1 90)",   // muted gold
+};
+
+const STATE_REGION: Record<string, keyof typeof REGION_COLORS> = {
+  // North
+  "Jammu & Kashmir": "north", "Ladakh": "north", "Himachal Pradesh": "north",
+  "Punjab": "north", "Haryana": "north", "Delhi": "north", "Uttarakhand": "north",
+  "Uttar Pradesh": "north", "Rajasthan": "north", "Chandigarh": "north",
+  // West
+  "Gujarat": "west", "Maharashtra": "west", "Goa": "west",
+  "Dadra and Nagar Haveli": "west", "Daman & Diu": "west",
+  // Central
+  "Madhya Pradesh": "central", "Chhattisgarh": "central", "Jharkhand": "central",
+  // East
+  "Bihar": "east", "West Bengal": "east", "Odisha": "east", "Sikkim": "east",
+  // North East
+  "Assam": "ne", "Arunachal Pradesh": "ne", "Nagaland": "ne", "Manipur": "ne",
+  "Mizoram": "ne", "Tripura": "ne", "Meghalaya": "ne",
+  // South
+  "Andhra Pradesh": "south", "Telangana": "south", "Karnataka": "south",
+  "Kerala": "south", "Tamil Nadu": "south", "Puducherry": "south",
+  "Andaman & Nicobar Island": "south", "Lakshadweep": "south",
+};
+
+const colorForState = (name?: string) => {
+  if (!name) return REGION_COLORS.central;
+  const region = STATE_REGION[name];
+  return region ? REGION_COLORS[region] : REGION_COLORS.central;
+};
+
 interface Location {
   name: string;
   /** [longitude, latitude] */
@@ -68,18 +111,13 @@ export function IndiaImpactMap() {
             style={{ width: "100%", height: "auto", display: "block" }}
           >
             <defs>
-              <linearGradient id="stateFill" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="oklch(0.55 0.12 165)" />
-                <stop offset="55%" stopColor="oklch(0.42 0.1 175)" />
-                <stop offset="100%" stopColor="oklch(0.32 0.08 220)" />
-              </linearGradient>
               <filter id="stateShadow" x="-10%" y="-10%" width="120%" height="120%">
                 <feDropShadow
                   dx="0"
-                  dy="10"
-                  stdDeviation="10"
+                  dy="6"
+                  stdDeviation="6"
                   floodColor="oklch(0.32 0.08 220)"
-                  floodOpacity="0.4"
+                  floodOpacity="0.25"
                 />
               </filter>
               <radialGradient id="dotGlow" cx="50%" cy="50%" r="50%">
@@ -89,30 +127,35 @@ export function IndiaImpactMap() {
             </defs>
 
             <g filter="url(#stateShadow)">
-              <Geographies geography={indiaTopo}>
+              <Geographies geography={indiaStates}>
                 {({ geographies }) =>
-                  geographies.map((geo) => (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      style={{
-                        default: {
-                          fill: "url(#stateFill)",
-                          stroke: "oklch(1 0 0 / 0.35)",
-                          strokeWidth: 0.6,
-                          outline: "none",
-                        },
-                        hover: {
-                          fill: "oklch(0.5 0.13 195)",
-                          stroke: "oklch(1 0 0 / 0.6)",
-                          strokeWidth: 0.8,
-                          outline: "none",
-                          cursor: "pointer",
-                        },
-                        pressed: { fill: "oklch(0.42 0.12 200)", outline: "none" },
-                      }}
-                    />
-                  ))
+                  geographies.map((geo) => {
+                    const name = geo.properties?.st_nm as string | undefined;
+                    const fill = colorForState(name);
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        style={{
+                          default: {
+                            fill,
+                            stroke: "oklch(1 0 0 / 0.85)",
+                            strokeWidth: 0.7,
+                            strokeLinejoin: "round",
+                            outline: "none",
+                          },
+                          hover: {
+                            fill: "oklch(0.55 0.16 60)",
+                            stroke: "oklch(1 0 0)",
+                            strokeWidth: 1,
+                            outline: "none",
+                            cursor: "pointer",
+                          },
+                          pressed: { fill, outline: "none" },
+                        }}
+                      />
+                    );
+                  })
                 }
               </Geographies>
             </g>
@@ -229,13 +272,24 @@ export function IndiaImpactMap() {
           )}
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span
-              className="inline-block h-2.5 w-2.5 rounded-full"
-              style={{ background: "oklch(0.78 0.15 62)" }}
-            />
-            <span>Hover a location to view branches, agents & villages</span>
+        <div className="mt-4 flex flex-col gap-3 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+            {([
+              ["North", REGION_COLORS.north],
+              ["West", REGION_COLORS.west],
+              ["Central", REGION_COLORS.central],
+              ["East", REGION_COLORS.east],
+              ["NE", REGION_COLORS.ne],
+              ["South", REGION_COLORS.south],
+            ] as const).map(([label, color]) => (
+              <span key={label} className="flex items-center gap-1.5">
+                <span
+                  className="inline-block h-2.5 w-2.5 rounded-sm"
+                  style={{ background: color }}
+                />
+                <span>{label}</span>
+              </span>
+            ))}
           </div>
           <div className="font-medium text-foreground">
             14 States · 25,000+ Villages
