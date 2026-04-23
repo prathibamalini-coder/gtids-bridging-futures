@@ -79,7 +79,7 @@ function CulturePage() {
         description="At GTIDS, meaningful change begins with people — both the communities we serve and the teams that drive our mission forward."
       />
 
-      <section className="container-prose pb-12">
+      <section className="container-prose pb-8">
         <div className="overflow-hidden rounded-3xl shadow-elevated">
           <img
             src={cultureImg}
@@ -92,7 +92,7 @@ function CulturePage() {
         </div>
       </section>
 
-      <section className="container-prose pb-20">
+      <section className="container-prose pb-12">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {values.map(({ icon: Icon, title, desc }) => (
             <article

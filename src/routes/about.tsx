@@ -102,7 +102,7 @@ function AboutPage() {
               "linear-gradient(135deg, oklch(0.22 0.07 250 / 0.88) 0%, oklch(0.3 0.08 220 / 0.78) 55%, oklch(0.36 0.07 158 / 0.72) 100%)",
           }}
         />
-        <div className="container-prose py-28 md:py-40 lg:py-44 text-center">
+        <div className="container-prose py-20 md:py-28 lg:py-32 text-center">
           <span className="inline-block rounded-full bg-white/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white backdrop-blur ring-1 ring-white/20">
             About GTIDS
           </span>
@@ -130,7 +130,7 @@ function AboutPage() {
       </section>
 
       {/* 2. SPLIT: text left, image right */}
-      <section className="container-prose py-20 md:py-28">
+      <section className="container-prose py-12 md:py-16">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
             <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
@@ -189,7 +189,7 @@ function AboutPage() {
       </section>
 
       {/* 3. IMPACT IN CIRCLES */}
-      <section id="impact" className="gradient-soft py-20 md:py-28 border-y border-border">
+      <section id="impact" className="gradient-soft py-12 md:py-16 border-y border-border">
         <div className="container-prose">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
@@ -225,7 +225,7 @@ function AboutPage() {
       </section>
 
       {/* 4. LIVING LAB CARDS */}
-      <section className="container-prose py-20 md:py-28">
+      <section className="container-prose py-12 md:py-16">
         <div className="text-center max-w-2xl mx-auto">
           <span className="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
             The Living Lab
@@ -251,7 +251,7 @@ function AboutPage() {
       </section>
 
       {/* 5. SERVICES ICON GRID */}
-      <section className="bg-surface border-y border-border py-20 md:py-24">
+      <section className="bg-surface border-y border-border py-12 md:py-16">
         <div className="container-prose">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -286,7 +286,7 @@ function AboutPage() {
       </section>
 
       {/* 6. NETWORK FLOW */}
-      <section className="container-prose py-20 md:py-28">
+      <section className="container-prose py-12 md:py-16">
         <div className="text-center max-w-2xl mx-auto">
           <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
             Our Network
@@ -325,7 +325,7 @@ function AboutPage() {
       </section>
 
       {/* 7. QUOTE */}
-      <section className="gradient-soft border-y border-border py-20 md:py-24">
+      <section className="gradient-soft border-y border-border py-12 md:py-16">
         <div className="container-narrow text-center">
           <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-accent text-accent-foreground shadow-soft">
             <Quote className="h-6 w-6" />
@@ -338,7 +338,7 @@ function AboutPage() {
       </section>
 
       {/* 8. FINAL CTA BANNER */}
-      <section className="container-prose py-20">
+      <section className="container-prose py-12">
         <div className="relative overflow-hidden rounded-3xl bg-primary px-8 py-14 md:px-16 md:py-20 text-primary-foreground shadow-elevated">
           <div
             aria-hidden
