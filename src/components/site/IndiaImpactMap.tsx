@@ -272,13 +272,24 @@ export function IndiaImpactMap() {
           )}
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span
-              className="inline-block h-2.5 w-2.5 rounded-full"
-              style={{ background: "oklch(0.78 0.15 62)" }}
-            />
-            <span>Hover a location to view branches, agents & villages</span>
+        <div className="mt-4 flex flex-col gap-3 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+            {([
+              ["North", REGION_COLORS.north],
+              ["West", REGION_COLORS.west],
+              ["Central", REGION_COLORS.central],
+              ["East", REGION_COLORS.east],
+              ["NE", REGION_COLORS.ne],
+              ["South", REGION_COLORS.south],
+            ] as const).map(([label, color]) => (
+              <span key={label} className="flex items-center gap-1.5">
+                <span
+                  className="inline-block h-2.5 w-2.5 rounded-sm"
+                  style={{ background: color }}
+                />
+                <span>{label}</span>
+              </span>
+            ))}
           </div>
           <div className="font-medium text-foreground">
             14 States · 25,000+ Villages
