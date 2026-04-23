@@ -1,34 +1,38 @@
 import { useState } from "react";
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  Marker,
+} from "react-simple-maps";
+import indiaTopo from "@/assets/geo/india.json";
 
 interface Location {
   name: string;
-  /** Approx longitude → x% on the map (0-100) */
-  x: number;
-  /** Approx latitude → y% on the map (0-100) */
-  y: number;
+  /** [longitude, latitude] */
+  coordinates: [number, number];
   branches: number;
   agents: number;
   villages: number;
 }
 
-// (x,y) calibrated against the realistic India path below (viewBox 0 0 600 680).
 const locations: Location[] = [
-  { name: "Delhi",       x: 36, y: 22, branches: 12, agents: 320,  villages: 480  },
-  { name: "Mumbai",      x: 22, y: 52, branches: 18, agents: 540,  villages: 720  },
-  { name: "Goa",         x: 24, y: 64, branches: 6,  agents: 140,  villages: 210  },
-  { name: "Hyderabad",   x: 41, y: 60, branches: 22, agents: 680,  villages: 950  },
-  { name: "Vijayawada",  x: 49, y: 64, branches: 14, agents: 410,  villages: 600  },
-  { name: "Andhra",      x: 46, y: 70, branches: 28, agents: 920,  villages: 1450 },
-  { name: "Chennai",     x: 47, y: 78, branches: 20, agents: 610,  villages: 870  },
-  { name: "Tamil Nadu",  x: 42, y: 84, branches: 32, agents: 1080, villages: 1700 },
-  { name: "Odisha",      x: 56, y: 50, branches: 36, agents: 1240, villages: 2100 },
-  { name: "Koraput",     x: 52, y: 56, branches: 9,  agents: 260,  villages: 380  },
+  { name: "Delhi",      coordinates: [77.1025, 28.7041], branches: 12, agents: 320,  villages: 480  },
+  { name: "Mumbai",     coordinates: [72.8777, 19.0760], branches: 18, agents: 540,  villages: 720  },
+  { name: "Goa",        coordinates: [73.8278, 15.4909], branches: 6,  agents: 140,  villages: 210  },
+  { name: "Hyderabad",  coordinates: [78.4867, 17.3850], branches: 22, agents: 680,  villages: 950  },
+  { name: "Vijayawada", coordinates: [80.6480, 16.5062], branches: 14, agents: 410,  villages: 600  },
+  { name: "Andhra",     coordinates: [80.0193, 15.9129], branches: 28, agents: 920,  villages: 1450 },
+  { name: "Chennai",    coordinates: [80.2707, 13.0827], branches: 20, agents: 610,  villages: 870  },
+  { name: "Tamil Nadu", coordinates: [78.6569, 11.1271], branches: 32, agents: 1080, villages: 1700 },
+  { name: "Odisha",     coordinates: [85.0985, 20.9517], branches: 36, agents: 1240, villages: 2100 },
+  { name: "Koraput",    coordinates: [82.7108, 18.8127], branches: 9,  agents: 260,  villages: 380  },
 ];
 
 /**
- * Realistic India map with hover tooltips showing per-location
- * branches, agents and villages served. SVG path adapted from a
- * simplified GeoJSON outline of the Indian mainland + Sri Lanka.
+ * Real India map powered by react-simple-maps + a TopoJSON of Indian
+ * states. Markers represent GTIDS presence with hover tooltips
+ * showing branches, agents and villages.
  */
 export function IndiaImpactMap() {
   const [active, setActive] = useState<string | null>(null);
@@ -36,7 +40,7 @@ export function IndiaImpactMap() {
 
   return (
     <div className="relative mx-auto w-full max-w-3xl">
-      {/* Soft 3D platform shadow under the map */}
+      {/* Soft 3D platform shadow */}
       <div
         aria-hidden
         className="absolute inset-x-8 bottom-2 h-10 rounded-[50%] blur-2xl opacity-60"
@@ -56,29 +60,26 @@ export function IndiaImpactMap() {
         }}
       >
         <div className="relative">
-          <svg
-            viewBox="0 0 600 680"
-            className="w-full h-auto block"
-            role="img"
-            aria-label="Map of India highlighting GTIDS presence across 14 states"
+          <ComposableMap
+            projection="geoMercator"
+            projectionConfig={{ scale: 950, center: [82, 22] }}
+            width={600}
+            height={680}
+            style={{ width: "100%", height: "auto", display: "block" }}
           >
             <defs>
-              <linearGradient id="indiaFill" x1="0" y1="0" x2="1" y2="1">
+              <linearGradient id="stateFill" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stopColor="oklch(0.55 0.12 165)" />
                 <stop offset="55%" stopColor="oklch(0.42 0.1 175)" />
                 <stop offset="100%" stopColor="oklch(0.32 0.08 220)" />
               </linearGradient>
-              <linearGradient id="indiaHighlight" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="oklch(1 0 0 / 0.35)" />
-                <stop offset="100%" stopColor="oklch(1 0 0 / 0)" />
-              </linearGradient>
-              <filter id="india3d" x="-10%" y="-10%" width="120%" height="120%">
+              <filter id="stateShadow" x="-10%" y="-10%" width="120%" height="120%">
                 <feDropShadow
                   dx="0"
-                  dy="14"
-                  stdDeviation="14"
+                  dy="10"
+                  stdDeviation="10"
                   floodColor="oklch(0.32 0.08 220)"
-                  floodOpacity="0.45"
+                  floodOpacity="0.4"
                 />
               </filter>
               <radialGradient id="dotGlow" cx="50%" cy="50%" r="50%">
@@ -87,182 +88,102 @@ export function IndiaImpactMap() {
               </radialGradient>
             </defs>
 
-            {/* Realistic India silhouette — mainland + J&K crown + NE arm + Sri Lanka */}
-            <g filter="url(#india3d)">
-              {/* Mainland India */}
-              <path
-                fill="url(#indiaFill)"
-                d="M188,78
-                   C200,62 220,52 244,48
-                   C268,44 290,52 308,62
-                   C326,72 344,72 364,68
-                   C386,64 408,68 428,80
-                   L444,72
-                   C452,68 462,72 462,82
-                   L456,96
-                   C470,108 484,124 494,144
-                   C504,164 510,184 514,206
-                   C520,232 522,256 514,278
-                   C506,300 488,316 472,332
-                   C460,346 452,362 446,380
-                   C440,400 432,418 422,436
-                   C412,454 400,472 388,490
-                   C376,508 364,526 352,544
-                   C342,560 330,576 316,588
-                   C302,600 286,608 272,604
-                   C260,600 254,586 254,572
-                   C254,556 260,540 264,524
-                   C270,504 274,484 268,464
-                   C260,442 244,426 232,408
-                   C218,388 208,366 202,344
-                   C194,318 192,290 184,264
-                   C174,238 158,218 144,198
-                   C130,178 118,158 114,136
-                   C110,114 122,96 140,86
-                   C156,78 174,80 188,78 Z
-                   M450,90
-                   L468,84
-                   C476,82 484,86 484,94
-                   L478,108
-                   C470,112 458,108 450,100
-                   Z
-                   M488,116
-                   C500,114 514,118 524,128
-                   C534,138 540,152 540,168
-                   C540,180 532,190 520,192
-                   C508,194 498,186 492,176
-                   C486,164 484,150 484,136
-                   C484,128 484,120 488,116 Z"
-              />
-              {/* North-East narrow arm */}
-              <path
-                fill="url(#indiaFill)"
-                d="M482,164
-                   C498,158 516,160 532,168
-                   C548,176 558,190 562,206
-                   C566,222 562,238 552,246
-                   C540,254 524,250 512,242
-                   C498,232 488,218 484,202
-                   C482,190 480,176 482,164 Z"
-              />
-              {/* Sri Lanka */}
-              <path
-                fill="url(#indiaFill)"
-                d="M348,612
-                   C358,608 370,612 376,624
-                   C382,636 380,652 372,662
-                   C364,672 350,672 342,664
-                   C334,654 334,640 338,628
-                   C340,620 344,614 348,612 Z"
-              />
-              {/* Glossy top highlight */}
-              <path
-                fill="url(#indiaHighlight)"
-                d="M188,78
-                   C200,62 220,52 244,48
-                   C268,44 290,52 308,62
-                   C326,72 344,72 364,68
-                   C386,64 408,68 428,80
-                   C440,90 452,104 462,118
-                   C440,118 416,124 392,128
-                   C362,134 332,134 302,128
-                   C272,122 244,118 218,124
-                   C196,128 178,134 162,140
-                   C146,146 130,148 122,138
-                   C118,124 124,108 140,98
-                   C156,86 174,80 188,78 Z"
-                opacity="0.55"
-              />
+            <g filter="url(#stateShadow)">
+              <Geographies geography={indiaTopo}>
+                {({ geographies }) =>
+                  geographies.map((geo) => (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      style={{
+                        default: {
+                          fill: "url(#stateFill)",
+                          stroke: "oklch(1 0 0 / 0.35)",
+                          strokeWidth: 0.6,
+                          outline: "none",
+                        },
+                        hover: {
+                          fill: "oklch(0.5 0.13 195)",
+                          stroke: "oklch(1 0 0 / 0.6)",
+                          strokeWidth: 0.8,
+                          outline: "none",
+                          cursor: "pointer",
+                        },
+                        pressed: { fill: "oklch(0.42 0.12 200)", outline: "none" },
+                      }}
+                    />
+                  ))
+                }
+              </Geographies>
             </g>
 
-            {/* Location dots */}
             {locations.map((loc, i) => {
-              const cx = (loc.x / 100) * 600;
-              const cy = (loc.y / 100) * 680;
               const isActive = active === loc.name;
               return (
-                <g
+                <Marker
                   key={loc.name}
+                  coordinates={loc.coordinates}
                   onMouseEnter={() => setActive(loc.name)}
                   onMouseLeave={() => setActive(null)}
                   onFocus={() => setActive(loc.name)}
                   onBlur={() => setActive(null)}
-                  tabIndex={0}
-                  style={{ cursor: "pointer", outline: "none" }}
-                  aria-label={`${loc.name}: ${loc.branches} branches, ${loc.agents} agents`}
+                  style={{
+                    default: { cursor: "pointer", outline: "none" },
+                    hover: { cursor: "pointer", outline: "none" },
+                    pressed: { cursor: "pointer", outline: "none" },
+                  }}
                 >
                   {/* Glow halo */}
                   <circle
-                    cx={cx}
-                    cy={cy}
-                    r={isActive ? 34 : 22}
+                    r={isActive ? 22 : 16}
                     fill="url(#dotGlow)"
                     style={{ transition: "r 250ms ease" }}
                   />
                   {/* Pulsing ring */}
                   <circle
-                    cx={cx}
-                    cy={cy}
-                    r="10"
+                    r={6}
                     fill="none"
                     stroke="oklch(0.85 0.18 62 / 0.7)"
-                    strokeWidth="1.5"
+                    strokeWidth={1.2}
                     style={{
-                      transformOrigin: `${cx}px ${cy}px`,
                       animation: `mapPulse 2.4s ease-out ${i * 0.18}s infinite`,
+                      transformOrigin: "center",
                     }}
                   />
-                  {/* Solid dot with 3D shading */}
+                  {/* Solid dot */}
                   <circle
-                    cx={cx}
-                    cy={cy}
-                    r={isActive ? 8 : 6}
+                    r={isActive ? 5.5 : 4.5}
                     fill="oklch(0.78 0.15 62)"
                     stroke="oklch(1 0 0)"
-                    strokeWidth="1.5"
+                    strokeWidth={1.2}
                     style={{
                       filter: "drop-shadow(0 2px 3px oklch(0 0 0 / 0.35))",
                       transition: "r 200ms ease",
                     }}
                   />
-                  {/* Label chip — always visible but subtle */}
-                  <g
+                  <text
+                    textAnchor="start"
+                    x={8}
+                    y={3}
                     style={{
-                      transition: "opacity 200ms ease",
-                      opacity: isActive ? 1 : 0.85,
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: 9,
+                      fontWeight: 600,
+                      fill: "oklch(0.22 0.04 160)",
+                      paintOrder: "stroke",
+                      stroke: "oklch(1 0 0 / 0.85)",
+                      strokeWidth: 2.5,
+                      strokeLinejoin: "round",
                     }}
                   >
-                    <rect
-                      x={cx + 10}
-                      y={cy - 16}
-                      rx="6"
-                      ry="6"
-                      width={loc.name.length * 7 + 14}
-                      height="22"
-                      fill="oklch(1 0 0 / 0.92)"
-                      stroke="oklch(0.36 0.07 158 / 0.2)"
-                      strokeWidth="1"
-                      style={{
-                        filter: "drop-shadow(0 4px 8px oklch(0 0 0 / 0.18))",
-                      }}
-                    />
-                    <text
-                      x={cx + 17}
-                      y={cy}
-                      fontSize="12"
-                      fontWeight="600"
-                      fill="oklch(0.22 0.04 160)"
-                      fontFamily="Inter, sans-serif"
-                    >
-                      {loc.name}
-                    </text>
-                  </g>
-                </g>
+                    {loc.name}
+                  </text>
+                </Marker>
               );
             })}
-          </svg>
+          </ComposableMap>
 
-          {/* Hover tooltip — overlaid */}
+          {/* Hover tooltip overlay */}
           {activeLoc && (
             <div
               className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-2xl px-5 py-4 text-white shadow-elevated animate-fade-up"
@@ -308,7 +229,6 @@ export function IndiaImpactMap() {
           )}
         </div>
 
-        {/* Footer caption */}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <span
@@ -325,9 +245,9 @@ export function IndiaImpactMap() {
 
       <style>{`
         @keyframes mapPulse {
-          0%   { r: 8;  opacity: 0.9; }
-          70%  { r: 24; opacity: 0;   }
-          100% { r: 24; opacity: 0;   }
+          0%   { r: 4;  opacity: 0.9; }
+          70%  { r: 18; opacity: 0;   }
+          100% { r: 18; opacity: 0;   }
         }
       `}</style>
     </div>
