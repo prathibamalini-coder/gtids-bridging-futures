@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero.jpg";
 import {
@@ -40,7 +39,6 @@ export const Route = createFileRoute("/")({
 interface Offering {
   icon: LucideIcon;
   title: string;
-  short: string;
   desc: string;
 }
 
@@ -48,50 +46,42 @@ const offerings: Offering[] = [
   {
     icon: Banknote,
     title: "Financial Inclusion Services",
-    short: "Doorstep banking",
-    desc: "We enable seamless access to formal banking for rural and tribal populations by facilitating zero-balance account opening, Aadhaar-enabled services, deposits, withdrawals, remittances, and balance inquiries through our Bank Mitra network.",
+    desc: "Seamless access to formal banking for rural and tribal populations — zero-balance accounts, Aadhaar-enabled services, deposits, withdrawals, remittances and balance inquiries through our Bank Mitra network.",
   },
   {
     icon: Send,
-    title: "Direct Benefit Transfer (DBT) Enablement",
-    short: "Welfare delivery",
-    desc: "GTIDS ensures beneficiaries receive government entitlements directly into their bank accounts in a timely and transparent manner, reducing leakages and improving access to welfare schemes.",
+    title: "Direct Benefit Transfer",
+    desc: "Beneficiaries receive government entitlements directly into their bank accounts in a timely, transparent manner — reducing leakages and improving access to welfare schemes.",
   },
   {
     icon: GraduationCap,
     title: "Financial Literacy & Awareness",
-    short: "Knowledge for all",
-    desc: "We conduct community-level training and awareness programs to build financial knowledge, promote savings habits, and encourage responsible use of financial services.",
+    desc: "Community-level training and awareness programs that build financial knowledge, promote savings habits and encourage responsible use of financial services.",
   },
   {
     icon: HandCoins,
     title: "Credit Linkages & Microfinance",
-    short: "Capital access",
-    desc: "We connect individuals and small entrepreneurs to formal credit systems, enabling access to microfinance, small loans, and financial products that support income generation and business growth.",
+    desc: "Connecting individuals and small entrepreneurs to formal credit — microfinance, small loans and financial products that support income generation and business growth.",
   },
   {
     icon: PiggyBank,
-    title: "Savings & Investment Promotion",
-    short: "Build resilience",
-    desc: "GTIDS encourages a culture of savings by facilitating recurring deposits, fixed deposits, and other financial instruments that help households build financial security.",
+    title: "Savings & Investment",
+    desc: "Encouraging a culture of savings by facilitating recurring deposits, fixed deposits and other instruments that help households build long-term financial security.",
   },
   {
     icon: Briefcase,
-    title: "Livelihood & Skilling Integration",
-    short: "Income + banking",
-    desc: "Recognizing that financial inclusion must be linked to income, we integrate banking services with skilling programs and livelihood opportunities in collaboration with Centurion University of Technology and Management.",
+    title: "Livelihood & Skilling",
+    desc: "Integrating banking services with skilling programs and livelihood opportunities in collaboration with Centurion University of Technology and Management.",
   },
   {
     icon: Network,
-    title: "Last-Mile Service Delivery Network",
-    short: "Trust, locally built",
-    desc: "Our strong network of trained Bank Mitras ensures doorstep delivery of financial services, particularly in remote and underserved regions, building trust and accessibility within communities.",
+    title: "Last-Mile Delivery Network",
+    desc: "A trained network of Bank Mitras ensures doorstep delivery of financial services in remote and underserved regions — building trust and accessibility within communities.",
   },
   {
     icon: Building2,
     title: "Institutional Partnerships",
-    short: "Scale through collaboration",
-    desc: "We work closely with public sector banks, government agencies, and development institutions to deliver scalable and sustainable solutions for inclusive growth.",
+    desc: "Working closely with public sector banks, government agencies and development institutions to deliver scalable, sustainable solutions for inclusive growth.",
   },
 ];
 
@@ -100,40 +90,6 @@ function pad(n: number) {
 }
 
 function HomePage() {
-  const cardRefs = useRef<Array<HTMLElement | null>>([]);
-  const [active, setActive] = useState(0);
-
-  // Observe which card is in view to drive the sticky left panel + nav strip
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Pick the entry with the largest intersection ratio that is intersecting
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) {
-          const idx = Number((visible.target as HTMLElement).dataset.idx);
-          if (!Number.isNaN(idx)) setActive(idx);
-        }
-      },
-      {
-        rootMargin: "-40% 0px -45% 0px",
-        threshold: [0, 0.25, 0.5, 0.75, 1],
-      },
-    );
-    cardRefs.current.forEach((el) => el && observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  const scrollToCard = (i: number) => {
-    const el = cardRefs.current[i];
-    if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - 100;
-    window.scrollTo({ top, behavior: "smooth" });
-  };
-
-  const ActiveIcon = offerings[active].icon;
-
   return (
     <>
       {/* 1. HERO */}
@@ -153,18 +109,36 @@ function HomePage() {
               "linear-gradient(135deg, oklch(0.2 0.07 250 / 0.9) 0%, oklch(0.28 0.08 220 / 0.78) 55%, oklch(0.36 0.07 158 / 0.7) 100%)",
           }}
         />
-        <div className="container-prose py-28 md:py-40 lg:py-48 text-center">
+        {/* Floating 3D orbs */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-24 top-1/4 h-72 w-72 rounded-full blur-3xl opacity-60"
+          style={{
+            background:
+              "radial-gradient(circle at 30% 30%, oklch(0.78 0.15 62 / 0.6), transparent 70%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full blur-3xl opacity-50"
+          style={{
+            background:
+              "radial-gradient(circle at 70% 30%, oklch(0.7 0.1 158 / 0.7), transparent 70%)",
+          }}
+        />
+
+        <div className="container-prose py-24 md:py-32 lg:py-40 text-center">
           <span className="inline-block rounded-full bg-white/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white backdrop-blur ring-1 ring-white/20">
             Our Offerings
           </span>
           <h1 className="mt-6 mx-auto max-w-4xl font-display text-4xl md:text-6xl lg:text-7xl text-white text-balance leading-[1.05] animate-fade-up">
             A complete ecosystem for inclusive finance and livelihoods.
           </h1>
-          <p className="mt-6 mx-auto max-w-2xl text-base md:text-lg text-white/85 leading-relaxed">
-            Our services go beyond basic banking access — focusing on sustained usage, economic
-            participation, and long-term impact.
+          <p className="mt-5 mx-auto max-w-2xl text-base md:text-lg text-white/85 leading-relaxed">
+            Banking access, DBT, microfinance, literacy and last-mile delivery — built for sustained
+            usage and long-term impact.
           </p>
-          <div className="mt-9 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a
               href="#offerings"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground shadow-elevated transition-all hover:-translate-y-0.5"
@@ -180,208 +154,160 @@ function HomePage() {
           </div>
 
           <a
-            href="#nav-strip"
+            href="#offerings"
             aria-label="Scroll to offerings"
-            className="mt-14 inline-flex items-center justify-center text-white/80 hover:text-white animate-bounce"
+            className="mt-10 inline-flex items-center justify-center text-white/80 hover:text-white animate-bounce"
           >
             <ChevronDown className="h-6 w-6" />
           </a>
         </div>
       </section>
 
-      {/* 2. PREVIEW NAV STRIP (sticky on scroll) */}
-      <div
-        id="nav-strip"
-        className="sticky top-16 z-30 border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70"
+      {/* 2. OFFERINGS — Numbered card grid (2 × 4) with 3D tilt */}
+      <section
+        id="offerings"
+        className="relative scroll-mt-24 py-14 md:py-20"
+        style={{
+          background:
+            "radial-gradient(ellipse at top, oklch(0.97 0.015 220) 0%, var(--background) 70%)",
+        }}
       >
-        <div className="container-prose">
-          <div className="flex gap-2 overflow-x-auto py-3 scrollbar-thin">
+        {/* Floating 3D background shapes */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-[5%] top-10 h-40 w-40 rounded-3xl rotate-12 opacity-40 blur-2xl"
+          style={{
+            background:
+              "linear-gradient(135deg, oklch(0.7 0.1 158 / 0.5), oklch(0.45 0.12 230 / 0.4))",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-[3%] bottom-20 h-52 w-52 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.78 0.15 62 / 0.4), transparent 70%)",
+          }}
+        />
+
+        <div className="container-prose relative">
+          <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
+            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+              Our 8 Offerings
+            </span>
+            <h2 className="mt-3 font-display text-3xl md:text-5xl text-foreground text-balance">
+              A complete suite for inclusive growth
+            </h2>
+            <p className="mt-3 text-muted-foreground text-base md:text-lg">
+              Each offering connects to the next — forming a single, end-to-end ecosystem.
+            </p>
+          </div>
+
+          {/* 2 × 4 grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
             {offerings.map((o, i) => {
-              const isActive = i === active;
+              const Icon = o.icon;
               return (
-                <button
+                <article
                   key={o.title}
-                  type="button"
-                  onClick={() => scrollToCard(i)}
-                  className={`group flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-all ${
-                    isActive
-                      ? "bg-primary text-primary-foreground shadow-soft"
-                      : "bg-muted text-muted-foreground hover:bg-primary-soft/60 hover:text-primary"
-                  }`}
+                  className="group relative overflow-hidden rounded-3xl bg-card p-6 md:p-7 ring-1 ring-border shadow-soft transition-all duration-300 hover:-translate-y-2 hover:shadow-elevated hover:ring-primary/30"
+                  style={{
+                    transformStyle: "preserve-3d",
+                  }}
                 >
+                  {/* 3D faded background number */}
                   <span
-                    className={`font-display text-sm leading-none ${
-                      isActive ? "text-accent" : "text-foreground/60"
-                    }`}
+                    aria-hidden
+                    className="pointer-events-none absolute -top-8 -right-3 font-display text-[8.5rem] leading-none font-semibold select-none transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-1"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, oklch(0.36 0.07 158 / 0.12), oklch(0.45 0.12 230 / 0.06))",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      color: "transparent",
+                    }}
                   >
                     {pad(i)}
                   </span>
-                  <span className="hidden sm:inline">{o.short}</span>
-                </button>
+
+                  {/* Decorative 3D corner shape */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -bottom-12 -left-12 h-32 w-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-60"
+                    style={{
+                      background:
+                        "radial-gradient(circle, oklch(0.7 0.1 158 / 0.45), transparent 70%)",
+                    }}
+                  />
+
+                  {/* 3D icon tile */}
+                  <div className="relative">
+                    <div
+                      className="grid h-14 w-14 place-items-center rounded-2xl text-primary-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, oklch(0.45 0.12 230) 0%, oklch(0.4 0.09 180) 50%, oklch(0.36 0.07 158) 100%)",
+                        boxShadow:
+                          "0 8px 20px -6px oklch(0.36 0.07 158 / 0.5), inset 0 1px 0 0 oklch(1 0 0 / 0.25), inset 0 -2px 4px 0 oklch(0 0 0 / 0.15)",
+                      }}
+                    >
+                      <Icon className="h-6 w-6" />
+                    </div>
+                  </div>
+
+                  <div className="relative mt-5">
+                    <div className="text-[11px] font-bold tracking-[0.2em] text-accent">
+                      {pad(i)} · OFFERING
+                    </div>
+                    <h3 className="mt-1.5 font-display text-lg md:text-xl text-foreground leading-snug">
+                      {o.title}
+                    </h3>
+                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                      {o.desc}
+                    </p>
+                  </div>
+                </article>
               );
             })}
           </div>
         </div>
-      </div>
-
-      {/* 3. MAIN SPLIT — sticky left panel + scrolling cards */}
-      <section
-        id="offerings"
-        className="container-prose py-16 md:py-24 scroll-mt-32"
-      >
-        <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-10 lg:gap-16">
-          {/* Sticky left */}
-          <aside className="hidden lg:block">
-            <div className="sticky top-40">
-              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-                Our 8 Offerings
-              </span>
-              <div
-                key={active}
-                className="mt-4 font-display text-[7rem] leading-none font-semibold text-primary animate-fade-up"
-              >
-                {pad(active)}
-              </div>
-              <h2
-                key={`t-${active}`}
-                className="mt-4 font-display text-3xl xl:text-4xl text-foreground text-balance animate-fade-up"
-              >
-                {offerings[active].title}
-              </h2>
-              <div className="mt-6 flex items-center gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-soft">
-                  <ActiveIcon className="h-5 w-5" />
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {offerings[active].short}
-                </div>
-              </div>
-
-              {/* Progress dots */}
-              <div className="mt-10 space-y-2">
-                {offerings.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => scrollToCard(i)}
-                    aria-label={`Go to offering ${pad(i)}`}
-                    className="flex items-center gap-3 group"
-                  >
-                    <span
-                      className={`h-1.5 rounded-full transition-all ${
-                        i === active
-                          ? "w-10 bg-accent"
-                          : "w-5 bg-border group-hover:bg-primary/40"
-                      }`}
-                    />
-                    <span
-                      className={`text-xs font-mono transition-colors ${
-                        i === active
-                          ? "text-foreground"
-                          : "text-muted-foreground group-hover:text-foreground"
-                      }`}
-                    >
-                      {pad(i)}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </aside>
-
-          {/* Scrolling cards (right) — connected by a vertical line */}
-          <div className="relative">
-            <div
-              aria-hidden
-              className="hidden md:block absolute left-6 top-4 bottom-4 w-px bg-gradient-to-b from-primary/30 via-border to-primary/10"
-            />
-            <div className="space-y-8">
-              {offerings.map((o, i) => {
-                const Icon = o.icon;
-                return (
-                  <article
-                    key={o.title}
-                    data-idx={i}
-                    ref={(el) => {
-                      cardRefs.current[i] = el;
-                    }}
-                    className={`relative md:ml-14 group rounded-3xl border border-border bg-card p-7 md:p-9 shadow-soft transition-all duration-300 hover:shadow-elevated hover:-translate-y-1 overflow-hidden ${
-                      i === active ? "ring-1 ring-primary/30" : ""
-                    }`}
-                  >
-                    {/* Step dot */}
-                    <span
-                      aria-hidden
-                      className={`hidden md:grid absolute -left-[3.75rem] top-9 h-7 w-7 place-items-center rounded-full border-2 transition-all ${
-                        i === active
-                          ? "bg-accent border-accent shadow-elevated scale-110"
-                          : "bg-card border-border"
-                      }`}
-                    >
-                      <span
-                        className={`h-2 w-2 rounded-full ${
-                          i === active ? "bg-white" : "bg-primary/40"
-                        }`}
-                      />
-                    </span>
-
-                    {/* Faded background number */}
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute -top-6 -right-2 font-display text-[9rem] leading-none font-semibold text-primary/[0.06] select-none transition-colors group-hover:text-primary/[0.1]"
-                    >
-                      {pad(i)}
-                    </span>
-
-                    <div className="relative flex items-start gap-4">
-                      <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary-soft text-primary shrink-0 transition-transform group-hover:scale-110">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-[11px] font-bold tracking-[0.18em] text-accent">
-                          {pad(i)} · OFFERING
-                        </div>
-                        <h3 className="mt-1 font-display text-xl md:text-2xl text-foreground leading-snug">
-                          {o.title}
-                        </h3>
-                      </div>
-                    </div>
-
-                    <p className="relative mt-5 text-sm md:text-[0.95rem] text-muted-foreground leading-relaxed">
-                      {o.desc}
-                    </p>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </div>
       </section>
 
-      {/* 4. FINAL CTA */}
-      <section className="container-prose pb-24 pt-4">
+      {/* 3. FINAL CTA */}
+      <section className="container-prose pb-20 pt-2">
         <div
-          className="relative overflow-hidden rounded-3xl px-8 py-16 md:px-16 md:py-20 text-white shadow-elevated"
+          className="relative overflow-hidden rounded-3xl px-8 py-14 md:px-16 md:py-16 text-white shadow-elevated"
           style={{
             background:
               "linear-gradient(135deg, oklch(0.32 0.1 235) 0%, oklch(0.36 0.07 158) 100%)",
           }}
         >
+          {/* 3D floating spheres */}
           <div
             aria-hidden
-            className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-accent/30 blur-3xl"
+            className="absolute -right-16 -top-16 h-64 w-64 rounded-full"
+            style={{
+              background:
+                "radial-gradient(circle at 30% 30%, oklch(0.78 0.15 62 / 0.7), oklch(0.78 0.15 62 / 0.1) 60%, transparent 70%)",
+              filter: "blur(20px)",
+            }}
           />
           <div
             aria-hidden
-            className="absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-white/10 blur-3xl"
+            className="absolute -bottom-20 -left-20 h-72 w-72 rounded-full"
+            style={{
+              background:
+                "radial-gradient(circle at 70% 30%, oklch(1 0 0 / 0.18), transparent 70%)",
+              filter: "blur(24px)",
+            }}
           />
           <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
               <h2 className="font-display text-3xl md:text-5xl text-balance max-w-2xl">
                 Driving Inclusive Finance at Scale
               </h2>
-              <p className="mt-4 text-white/80 max-w-xl">
-                Join us in transforming rural economies through partnership, technology, and trust.
+              <p className="mt-3 text-white/80 max-w-xl">
+                Join us in transforming rural economies through partnership, technology and trust.
               </p>
             </div>
             <Link
