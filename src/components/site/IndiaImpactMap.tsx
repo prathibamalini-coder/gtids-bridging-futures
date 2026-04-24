@@ -191,6 +191,51 @@ export function IndiaImpactMap() {
               </Geographies>
             </g>
 
+            {/* Air-connectivity routes from Head Office to each highlighted state */}
+            {Object.entries(STATE_CENTERS).map(([state, coord]) => (
+              <Line
+                key={`route-${state}`}
+                from={HEAD_OFFICE.coordinates}
+                to={coord}
+                stroke="oklch(0.62 0.22 25 / 0.7)"
+                strokeWidth={1.1}
+                strokeLinecap="round"
+                strokeDasharray="3 4"
+                style={{
+                  animation: "routeDash 1.6s linear infinite",
+                }}
+              />
+            ))}
+
+            {/* State name labels on highlighted states */}
+            {Object.entries(STATE_CENTERS).map(([state, coord]) => (
+              <Marker key={`label-${state}`} coordinates={coord}>
+                <circle
+                  r={2.2}
+                  fill="oklch(1 0 0)"
+                  stroke="oklch(0.32 0.08 220)"
+                  strokeWidth={1}
+                />
+                <text
+                  textAnchor="middle"
+                  y={-7}
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: 8.5,
+                    fontWeight: 700,
+                    fill: "oklch(0.22 0.05 220)",
+                    paintOrder: "stroke",
+                    stroke: "oklch(1 0 0 / 0.92)",
+                    strokeWidth: 2.8,
+                    strokeLinejoin: "round",
+                    pointerEvents: "none",
+                  }}
+                >
+                  {state}
+                </text>
+              </Marker>
+            ))}
+
             {/* Sparkles anchored to highlighted state centers via Marker projection */}
             {sparkles.map((sp) => (
               <Marker
