@@ -31,6 +31,7 @@ const nav: NavItem[] = [
       { to: "/impact/partners", label: "Partners" },
     ],
   },
+  { label: "Drone", to: "/drone" },
   {
     label: "Contact",
     children: [
@@ -38,7 +39,6 @@ const nav: NavItem[] = [
       { to: "/grievance", label: "Grievance" },
     ],
   },
-  { label: "Drone", to: "/drone" },
 ];
 
 export function Header() {
