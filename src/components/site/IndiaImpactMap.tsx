@@ -371,6 +371,9 @@ export function IndiaImpactMap() {
           40%      { opacity: 1; transform: translateY(-3px) scale(1.1); }
           70%      { opacity: 0.7; transform: translateY(-5px) scale(1); }
         }
+        @keyframes routeDash {
+          to { stroke-dashoffset: -14; }
+        }
       `}</style>
     </div>
   );
