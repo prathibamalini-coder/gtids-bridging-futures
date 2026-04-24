@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VisionRouteImport } from './routes/vision'
 import { Route as ServicesRouteImport } from './routes/services'
-import { Route as MissionRouteImport } from './routes/mission'
 import { Route as CultureRouteImport } from './routes/culture'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
@@ -25,11 +24,6 @@ const VisionRoute = VisionRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MissionRoute = MissionRouteImport.update({
-  id: '/mission',
-  path: '/mission',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CultureRoute = CultureRouteImport.update({
@@ -58,7 +52,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/culture': typeof CultureRoute
-  '/mission': typeof MissionRoute
   '/services': typeof ServicesRoute
   '/vision': typeof VisionRoute
 }
@@ -67,7 +60,6 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/culture': typeof CultureRoute
-  '/mission': typeof MissionRoute
   '/services': typeof ServicesRoute
   '/vision': typeof VisionRoute
 }
@@ -77,36 +69,20 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/culture': typeof CultureRoute
-  '/mission': typeof MissionRoute
   '/services': typeof ServicesRoute
   '/vision': typeof VisionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/about'
-    | '/contact'
-    | '/culture'
-    | '/mission'
-    | '/services'
-    | '/vision'
+  fullPaths: '/' | '/about' | '/contact' | '/culture' | '/services' | '/vision'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/about'
-    | '/contact'
-    | '/culture'
-    | '/mission'
-    | '/services'
-    | '/vision'
+  to: '/' | '/about' | '/contact' | '/culture' | '/services' | '/vision'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/contact'
     | '/culture'
-    | '/mission'
     | '/services'
     | '/vision'
   fileRoutesById: FileRoutesById
@@ -116,7 +92,6 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   CultureRoute: typeof CultureRoute
-  MissionRoute: typeof MissionRoute
   ServicesRoute: typeof ServicesRoute
   VisionRoute: typeof VisionRoute
 }
@@ -135,13 +110,6 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mission': {
-      id: '/mission'
-      path: '/mission'
-      fullPath: '/mission'
-      preLoaderRoute: typeof MissionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/culture': {
@@ -180,7 +148,6 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   CultureRoute: CultureRoute,
-  MissionRoute: MissionRoute,
   ServicesRoute: ServicesRoute,
   VisionRoute: VisionRoute,
 }
