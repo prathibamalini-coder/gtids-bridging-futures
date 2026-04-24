@@ -190,26 +190,7 @@ export function IndiaImpactMap() {
               </Geographies>
             </g>
 
-            {/* Sparkles on highlighted states */}
-            <g aria-hidden>
-              {sparkles.map((sp) =>
-                sp.offsets.map((o, i) => (
-                  <circle
-                    key={`${sp.state}-${i}`}
-                    cx={0}
-                    cy={0}
-                    r={o.r}
-                    fill="url(#sparkle)"
-                    transform={`translate(${
-                      // project lon/lat roughly via Marker — use Marker instead for accuracy
-                      0
-                    } 0)`}
-                  />
-                ))
-              )}
-            </g>
-
-            {/* Use Marker for accurate projection of sparkles */}
+            {/* Sparkles anchored to highlighted state centers via Marker projection */}
             {sparkles.map((sp) => (
               <Marker
                 key={sp.state}

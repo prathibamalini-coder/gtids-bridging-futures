@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero.jpg";
+import { IndiaImpactMap } from "@/components/site/IndiaImpactMap";
 import {
   ArrowRight,
   ChevronDown,
@@ -11,6 +12,8 @@ import {
   Briefcase,
   Network,
   Building2,
+  Plane,
+  ExternalLink,
   type LucideIcon,
 } from "lucide-react";
 
