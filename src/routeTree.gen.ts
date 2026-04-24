@@ -11,10 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VisionRouteImport } from './routes/vision'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as GrievanceRouteImport } from './routes/grievance'
+import { Route as DroneRouteImport } from './routes/drone'
 import { Route as CultureRouteImport } from './routes/culture'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OrganizationTeamRouteImport } from './routes/organization.team'
+import { Route as OrganizationOrganogramRouteImport } from './routes/organization.organogram'
+import { Route as OrganizationDirectorsRouteImport } from './routes/organization.directors'
+import { Route as ImpactStoriesRouteImport } from './routes/impact.stories'
+import { Route as ImpactPartnersRouteImport } from './routes/impact.partners'
 
 const VisionRoute = VisionRouteImport.update({
   id: '/vision',
@@ -24,6 +31,16 @@ const VisionRoute = VisionRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GrievanceRoute = GrievanceRouteImport.update({
+  id: '/grievance',
+  path: '/grievance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DroneRoute = DroneRouteImport.update({
+  id: '/drone',
+  path: '/drone',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CultureRoute = CultureRouteImport.update({
@@ -46,22 +63,61 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrganizationTeamRoute = OrganizationTeamRouteImport.update({
+  id: '/organization/team',
+  path: '/organization/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizationOrganogramRoute = OrganizationOrganogramRouteImport.update({
+  id: '/organization/organogram',
+  path: '/organization/organogram',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizationDirectorsRoute = OrganizationDirectorsRouteImport.update({
+  id: '/organization/directors',
+  path: '/organization/directors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImpactStoriesRoute = ImpactStoriesRouteImport.update({
+  id: '/impact/stories',
+  path: '/impact/stories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImpactPartnersRoute = ImpactPartnersRouteImport.update({
+  id: '/impact/partners',
+  path: '/impact/partners',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/culture': typeof CultureRoute
+  '/drone': typeof DroneRoute
+  '/grievance': typeof GrievanceRoute
   '/services': typeof ServicesRoute
   '/vision': typeof VisionRoute
+  '/impact/partners': typeof ImpactPartnersRoute
+  '/impact/stories': typeof ImpactStoriesRoute
+  '/organization/directors': typeof OrganizationDirectorsRoute
+  '/organization/organogram': typeof OrganizationOrganogramRoute
+  '/organization/team': typeof OrganizationTeamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/culture': typeof CultureRoute
+  '/drone': typeof DroneRoute
+  '/grievance': typeof GrievanceRoute
   '/services': typeof ServicesRoute
   '/vision': typeof VisionRoute
+  '/impact/partners': typeof ImpactPartnersRoute
+  '/impact/stories': typeof ImpactStoriesRoute
+  '/organization/directors': typeof OrganizationDirectorsRoute
+  '/organization/organogram': typeof OrganizationOrganogramRoute
+  '/organization/team': typeof OrganizationTeamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,22 +125,62 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/culture': typeof CultureRoute
+  '/drone': typeof DroneRoute
+  '/grievance': typeof GrievanceRoute
   '/services': typeof ServicesRoute
   '/vision': typeof VisionRoute
+  '/impact/partners': typeof ImpactPartnersRoute
+  '/impact/stories': typeof ImpactStoriesRoute
+  '/organization/directors': typeof OrganizationDirectorsRoute
+  '/organization/organogram': typeof OrganizationOrganogramRoute
+  '/organization/team': typeof OrganizationTeamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/culture' | '/services' | '/vision'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/culture'
+    | '/drone'
+    | '/grievance'
+    | '/services'
+    | '/vision'
+    | '/impact/partners'
+    | '/impact/stories'
+    | '/organization/directors'
+    | '/organization/organogram'
+    | '/organization/team'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/culture' | '/services' | '/vision'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/culture'
+    | '/drone'
+    | '/grievance'
+    | '/services'
+    | '/vision'
+    | '/impact/partners'
+    | '/impact/stories'
+    | '/organization/directors'
+    | '/organization/organogram'
+    | '/organization/team'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/contact'
     | '/culture'
+    | '/drone'
+    | '/grievance'
     | '/services'
     | '/vision'
+    | '/impact/partners'
+    | '/impact/stories'
+    | '/organization/directors'
+    | '/organization/organogram'
+    | '/organization/team'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,8 +188,15 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   CultureRoute: typeof CultureRoute
+  DroneRoute: typeof DroneRoute
+  GrievanceRoute: typeof GrievanceRoute
   ServicesRoute: typeof ServicesRoute
   VisionRoute: typeof VisionRoute
+  ImpactPartnersRoute: typeof ImpactPartnersRoute
+  ImpactStoriesRoute: typeof ImpactStoriesRoute
+  OrganizationDirectorsRoute: typeof OrganizationDirectorsRoute
+  OrganizationOrganogramRoute: typeof OrganizationOrganogramRoute
+  OrganizationTeamRoute: typeof OrganizationTeamRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -110,6 +213,20 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grievance': {
+      id: '/grievance'
+      path: '/grievance'
+      fullPath: '/grievance'
+      preLoaderRoute: typeof GrievanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/drone': {
+      id: '/drone'
+      path: '/drone'
+      fullPath: '/drone'
+      preLoaderRoute: typeof DroneRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/culture': {
@@ -140,6 +257,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/organization/team': {
+      id: '/organization/team'
+      path: '/organization/team'
+      fullPath: '/organization/team'
+      preLoaderRoute: typeof OrganizationTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organization/organogram': {
+      id: '/organization/organogram'
+      path: '/organization/organogram'
+      fullPath: '/organization/organogram'
+      preLoaderRoute: typeof OrganizationOrganogramRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organization/directors': {
+      id: '/organization/directors'
+      path: '/organization/directors'
+      fullPath: '/organization/directors'
+      preLoaderRoute: typeof OrganizationDirectorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/impact/stories': {
+      id: '/impact/stories'
+      path: '/impact/stories'
+      fullPath: '/impact/stories'
+      preLoaderRoute: typeof ImpactStoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/impact/partners': {
+      id: '/impact/partners'
+      path: '/impact/partners'
+      fullPath: '/impact/partners'
+      preLoaderRoute: typeof ImpactPartnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -148,8 +300,15 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   CultureRoute: CultureRoute,
+  DroneRoute: DroneRoute,
+  GrievanceRoute: GrievanceRoute,
   ServicesRoute: ServicesRoute,
   VisionRoute: VisionRoute,
+  ImpactPartnersRoute: ImpactPartnersRoute,
+  ImpactStoriesRoute: ImpactStoriesRoute,
+  OrganizationDirectorsRoute: OrganizationDirectorsRoute,
+  OrganizationOrganogramRoute: OrganizationOrganogramRoute,
+  OrganizationTeamRoute: OrganizationTeamRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
