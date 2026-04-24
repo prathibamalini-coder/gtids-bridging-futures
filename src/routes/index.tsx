@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero.jpg";
+import { IndiaImpactMap } from "@/components/site/IndiaImpactMap";
 import {
   ArrowRight,
   ChevronDown,
@@ -11,6 +12,8 @@ import {
   Briefcase,
   Network,
   Building2,
+  Plane,
+  ExternalLink,
   type LucideIcon,
 } from "lucide-react";
 
@@ -273,7 +276,67 @@ function HomePage() {
         </div>
       </section>
 
-      {/* 3. FINAL CTA */}
+      {/* MAP — Operational presence across India */}
+      <section className="gradient-soft py-12 md:py-16 border-y border-border">
+        <div className="container-prose">
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+              Where We Work
+            </span>
+            <h2 className="mt-3 font-display text-3xl md:text-5xl text-foreground text-balance">
+              Operational across 8 states.
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              Headquartered in Visakhapatnam, with active operations in Odisha, Bihar, Assam,
+              Andhra Pradesh, Telangana, Tamil Nadu, Karnataka and Goa.
+            </p>
+          </div>
+          <IndiaImpactMap />
+        </div>
+      </section>
+
+      {/* Other Initiatives — Drone */}
+      <section className="container-prose py-10">
+        <div className="text-center max-w-2xl mx-auto mb-6">
+          <span className="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+            Other Initiatives
+          </span>
+          <h2 className="mt-3 font-display text-3xl md:text-4xl text-foreground text-balance">
+            Innovation that takes flight.
+          </h2>
+        </div>
+        <a
+          href="https://superbeeaeronautics.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative block overflow-hidden rounded-3xl p-8 md:p-10 text-white shadow-elevated transition-transform hover:-translate-y-1"
+          style={{
+            background:
+              "linear-gradient(135deg, oklch(0.3 0.1 235) 0%, oklch(0.36 0.07 158) 100%)",
+          }}
+        >
+          <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6 justify-between">
+            <div className="flex items-start gap-5">
+              <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur shrink-0">
+                <Plane className="h-6 w-6" />
+              </div>
+              <div>
+                <span className="inline-block rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur ring-1 ring-white/20">
+                  Sister Company
+                </span>
+                <h3 className="mt-3 font-display text-2xl md:text-3xl">Super Bee Aeronautics</h3>
+                <p className="mt-2 text-white/85 max-w-lg">
+                  Drone systems for agriculture, mapping and rural logistics.
+                </p>
+              </div>
+            </div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform group-hover:-translate-y-0.5">
+              Visit website <ExternalLink className="h-4 w-4" />
+            </span>
+          </div>
+        </a>
+      </section>
+
       <section className="container-prose pb-12 pt-2">
         <div
           className="relative overflow-hidden rounded-3xl px-8 py-14 md:px-16 md:py-16 text-white shadow-elevated"

@@ -3,9 +3,9 @@ import { Mail, MapPin, Phone } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-border bg-surface">
-      <div className="container-prose py-14 grid gap-10 md:grid-cols-3">
-        <div>
+    <footer className="mt-20 border-t border-border bg-surface">
+      <div className="container-prose py-12 grid gap-10 md:grid-cols-4">
+        <div className="md:col-span-1">
           <div className="flex items-center gap-2.5">
             <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground font-display text-lg font-semibold">
               G
@@ -24,10 +24,22 @@ export function Footer() {
           </h4>
           <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
             <li><Link to="/about" className="hover:text-primary transition-colors">About Us</Link></li>
-            <li><Link to="/vision" className="hover:text-primary transition-colors">Our Vision</Link></li>
-            <li><Link to="/mission" className="hover:text-primary transition-colors">Our Mission</Link></li>
-            <li><Link to="/services" className="hover:text-primary transition-colors">Our Services</Link></li>
-            <li><Link to="/culture" className="hover:text-primary transition-colors">Culture</Link></li>
+            <li><Link to="/vision" className="hover:text-primary transition-colors">Vision &amp; Mission</Link></li>
+            <li><Link to="/services" className="hover:text-primary transition-colors">Services</Link></li>
+            <li><Link to="/drone" className="hover:text-primary transition-colors">Drone</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="font-display text-sm font-semibold uppercase tracking-wider text-foreground">
+            Organization
+          </h4>
+          <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
+            <li><Link to="/organization/directors" className="hover:text-primary transition-colors">Directors</Link></li>
+            <li><Link to="/organization/team" className="hover:text-primary transition-colors">Team</Link></li>
+            <li><Link to="/organization/organogram" className="hover:text-primary transition-colors">Organogram</Link></li>
+            <li><Link to="/impact/stories" className="hover:text-primary transition-colors">Success Stories</Link></li>
+            <li><Link to="/impact/partners" className="hover:text-primary transition-colors">Partners</Link></li>
           </ul>
         </div>
 
@@ -38,7 +50,7 @@ export function Footer() {
           <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
             <li className="flex gap-3">
               <MapPin className="h-4 w-4 mt-0.5 text-primary shrink-0" />
-              <span>Flat no 501, Akruthi Vijayalakshmi Residency, P &amp; T Colony, Seethammadhara, Vishakhapatnam – 530013</span>
+              <span>Flat no 501, Akruthi Vijayalakshmi Residency, P &amp; T Colony, Seethammadhara, Visakhapatnam – 530013</span>
             </li>
             <li className="flex gap-3">
               <Phone className="h-4 w-4 mt-0.5 text-primary shrink-0" />
@@ -47,6 +59,9 @@ export function Footer() {
             <li className="flex gap-3">
               <Mail className="h-4 w-4 mt-0.5 text-primary shrink-0" />
               <a href="mailto:info@gramtarang.org" className="hover:text-primary transition-colors">info@gramtarang.org</a>
+            </li>
+            <li>
+              <Link to="/grievance" className="hover:text-primary transition-colors">Raise a grievance</Link>
             </li>
           </ul>
         </div>

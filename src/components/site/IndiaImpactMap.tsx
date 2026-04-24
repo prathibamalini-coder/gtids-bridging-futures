@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -7,83 +7,91 @@ import {
 } from "react-simple-maps";
 import indiaTopo from "@/assets/geo/india.json";
 
-// Force the states layer (not districts) to keep the map clean
+// Use the lighter "states" layer of the TopoJSON
 const indiaStates = {
   ...(indiaTopo as any),
   objects: { states: (indiaTopo as any).objects.states },
 };
 
-// Group states into colored regions for visual distinction
-const REGION_COLORS: Record<string, string> = {
-  north: "oklch(0.72 0.13 50)",   // warm amber
-  south: "oklch(0.62 0.13 165)",  // teal green
-  east:  "oklch(0.6 0.14 280)",   // indigo
-  west:  "oklch(0.68 0.15 30)",   // coral
-  ne:    "oklch(0.66 0.14 130)",  // lime
-  central: "oklch(0.7 0.1 90)",   // muted gold
+// Operational states — all other states stay neutral
+const HIGHLIGHTED_STATES = new Set<string>([
+  "Odisha",
+  "Bihar",
+  "Assam",
+  "Andhra Pradesh",
+  "Telangana",
+  "Tamil Nadu",
+  "Karnataka",
+  "Goa",
+]);
+
+const STATE_COLOR: Record<string, string> = {
+  Odisha: "oklch(0.7 0.14 35)",
+  Bihar: "oklch(0.74 0.13 90)",
+  Assam: "oklch(0.7 0.13 145)",
+  "Andhra Pradesh": "oklch(0.7 0.14 220)",
+  Telangana: "oklch(0.72 0.13 260)",
+  "Tamil Nadu": "oklch(0.7 0.14 15)",
+  Karnataka: "oklch(0.72 0.13 175)",
+  Goa: "oklch(0.78 0.14 70)",
 };
 
-const STATE_REGION: Record<string, keyof typeof REGION_COLORS> = {
-  // North
-  "Jammu & Kashmir": "north", "Ladakh": "north", "Himachal Pradesh": "north",
-  "Punjab": "north", "Haryana": "north", "Delhi": "north", "Uttarakhand": "north",
-  "Uttar Pradesh": "north", "Rajasthan": "north", "Chandigarh": "north",
-  // West
-  "Gujarat": "west", "Maharashtra": "west", "Goa": "west",
-  "Dadra and Nagar Haveli": "west", "Daman & Diu": "west",
-  // Central
-  "Madhya Pradesh": "central", "Chhattisgarh": "central", "Jharkhand": "central",
-  // East
-  "Bihar": "east", "West Bengal": "east", "Odisha": "east", "Sikkim": "east",
-  // North East
-  "Assam": "ne", "Arunachal Pradesh": "ne", "Nagaland": "ne", "Manipur": "ne",
-  "Mizoram": "ne", "Tripura": "ne", "Meghalaya": "ne",
-  // South
-  "Andhra Pradesh": "south", "Telangana": "south", "Karnataka": "south",
-  "Kerala": "south", "Tamil Nadu": "south", "Puducherry": "south",
-  "Andaman & Nicobar Island": "south", "Lakshadweep": "south",
+const NEUTRAL = "oklch(0.96 0.005 100)";
+
+const HEAD_OFFICE = {
+  name: "Head Office — Visakhapatnam",
+  short: "Visakhapatnam",
+  coordinates: [83.2185, 17.6868] as [number, number],
 };
 
-const colorForState = (name?: string) => {
-  if (!name) return REGION_COLORS.central;
-  const region = STATE_REGION[name];
-  return region ? REGION_COLORS[region] : REGION_COLORS.central;
-};
-
-interface Location {
-  name: string;
-  /** [longitude, latitude] */
-  coordinates: [number, number];
-  branches: number;
-  agents: number;
-  villages: number;
+interface SparkleSeed {
+  state: string;
+  base: [number, number];
+  offsets: { dx: number; dy: number; r: number; delay: number; dur: number }[];
 }
 
-const locations: Location[] = [
-  { name: "Delhi",      coordinates: [77.1025, 28.7041], branches: 12, agents: 320,  villages: 480  },
-  { name: "Mumbai",     coordinates: [72.8777, 19.0760], branches: 18, agents: 540,  villages: 720  },
-  { name: "Goa",        coordinates: [73.8278, 15.4909], branches: 6,  agents: 140,  villages: 210  },
-  { name: "Hyderabad",  coordinates: [78.4867, 17.3850], branches: 22, agents: 680,  villages: 950  },
-  { name: "Vijayawada", coordinates: [80.6480, 16.5062], branches: 14, agents: 410,  villages: 600  },
-  { name: "Andhra",     coordinates: [80.0193, 15.9129], branches: 28, agents: 920,  villages: 1450 },
-  { name: "Chennai",    coordinates: [80.2707, 13.0827], branches: 20, agents: 610,  villages: 870  },
-  { name: "Tamil Nadu", coordinates: [78.6569, 11.1271], branches: 32, agents: 1080, villages: 1700 },
-  { name: "Odisha",     coordinates: [85.0985, 20.9517], branches: 36, agents: 1240, villages: 2100 },
-  { name: "Koraput",    coordinates: [82.7108, 18.8127], branches: 9,  agents: 260,  villages: 380  },
-];
+// Approximate centers of highlighted states for sparkle anchoring
+const STATE_CENTERS: Record<string, [number, number]> = {
+  Odisha: [85.0, 20.5],
+  Bihar: [85.5, 25.5],
+  Assam: [92.9, 26.2],
+  "Andhra Pradesh": [80.0, 15.9],
+  Telangana: [79.0, 17.9],
+  "Tamil Nadu": [78.6, 11.1],
+  Karnataka: [76.0, 14.5],
+  Goa: [74.0, 15.4],
+};
 
-/**
- * Real India map powered by react-simple-maps + a TopoJSON of Indian
- * states. Markers represent GTIDS presence with hover tooltips
- * showing branches, agents and villages.
- */
+function rand(seed: number) {
+  // deterministic pseudo-random in [-1, 1]
+  const x = Math.sin(seed) * 10000;
+  return (x - Math.floor(x)) * 2 - 1;
+}
+
+function buildSparkles(): SparkleSeed[] {
+  const list: SparkleSeed[] = [];
+  let s = 1;
+  for (const [state, base] of Object.entries(STATE_CENTERS)) {
+    const count = 4 + Math.floor((Math.abs(rand(s++)) + 1) * 1.5); // 4–6
+    const offsets = Array.from({ length: count }, (_, i) => ({
+      dx: rand(s++) * 1.6,
+      dy: rand(s++) * 1.6,
+      r: 0.45 + (Math.abs(rand(s++)) * 0.5),
+      delay: i * 0.4 + Math.abs(rand(s++)) * 1.2,
+      dur: 3.2 + Math.abs(rand(s++)) * 1.8,
+    }));
+    list.push({ state, base, offsets });
+  }
+  return list;
+}
+
 export function IndiaImpactMap() {
-  const [active, setActive] = useState<string | null>(null);
-  const activeLoc = locations.find((l) => l.name === active);
+  const [hover, setHover] = useState<string | null>(null);
+  const sparkles = useMemo(buildSparkles, []);
 
   return (
     <div className="relative mx-auto w-full max-w-3xl">
-      {/* Soft 3D platform shadow */}
+      {/* soft 3D platform shadow */}
       <div
         aria-hidden
         className="absolute inset-x-8 bottom-2 h-10 rounded-[50%] blur-2xl opacity-60"
@@ -94,14 +102,23 @@ export function IndiaImpactMap() {
       />
 
       <div
-        className="relative rounded-[2rem] p-6 md:p-10"
+        className="relative rounded-[2rem] p-4 sm:p-6 md:p-10"
         style={{
           background:
-            "linear-gradient(160deg, oklch(0.97 0.015 220) 0%, oklch(0.94 0.025 200) 60%, oklch(0.9 0.04 180) 100%)",
+            "linear-gradient(160deg, oklch(0.98 0.01 220) 0%, oklch(0.95 0.02 200) 60%, oklch(0.92 0.03 180) 100%)",
           boxShadow:
             "0 30px 60px -30px oklch(0.36 0.07 158 / 0.35), inset 0 1px 0 0 oklch(1 0 0 / 0.7), inset 0 -2px 6px 0 oklch(0 0 0 / 0.05)",
         }}
       >
+        <div className="text-center mb-3">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
+            Operational Presence
+          </span>
+          <h3 className="mt-1 font-display text-xl md:text-2xl text-foreground">
+            8 States · Headquartered in Visakhapatnam
+          </h3>
+        </div>
+
         <div className="relative">
           <ComposableMap
             projection="geoMercator"
@@ -114,15 +131,20 @@ export function IndiaImpactMap() {
               <filter id="stateShadow" x="-10%" y="-10%" width="120%" height="120%">
                 <feDropShadow
                   dx="0"
-                  dy="6"
-                  stdDeviation="6"
+                  dy="4"
+                  stdDeviation="4"
                   floodColor="oklch(0.32 0.08 220)"
-                  floodOpacity="0.25"
+                  floodOpacity="0.18"
                 />
               </filter>
-              <radialGradient id="dotGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="oklch(0.85 0.18 62 / 0.7)" />
-                <stop offset="70%" stopColor="oklch(0.78 0.15 62 / 0)" />
+              <radialGradient id="hqGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="oklch(0.7 0.22 25 / 0.85)" />
+                <stop offset="70%" stopColor="oklch(0.7 0.22 25 / 0)" />
+              </radialGradient>
+              <radialGradient id="sparkle" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="oklch(1 0 0 / 0.95)" />
+                <stop offset="60%" stopColor="oklch(0.92 0.16 80 / 0.6)" />
+                <stop offset="100%" stopColor="oklch(0.92 0.16 80 / 0)" />
               </radialGradient>
             </defs>
 
@@ -131,25 +153,33 @@ export function IndiaImpactMap() {
                 {({ geographies }) =>
                   geographies.map((geo) => {
                     const name = geo.properties?.st_nm as string | undefined;
-                    const fill = colorForState(name);
+                    const isHighlighted = !!name && HIGHLIGHTED_STATES.has(name);
+                    const fill = isHighlighted
+                      ? STATE_COLOR[name!] ?? "oklch(0.7 0.13 160)"
+                      : NEUTRAL;
                     return (
                       <Geography
                         key={geo.rsmKey}
                         geography={geo}
+                        onMouseEnter={() => isHighlighted && setHover(name!)}
+                        onMouseLeave={() => setHover(null)}
                         style={{
                           default: {
                             fill,
-                            stroke: "oklch(1 0 0 / 0.85)",
-                            strokeWidth: 0.7,
+                            stroke: "oklch(0.78 0.01 200 / 0.9)",
+                            strokeWidth: 0.6,
                             strokeLinejoin: "round",
                             outline: "none",
+                            transition: "fill 200ms ease",
                           },
                           hover: {
-                            fill: "oklch(0.55 0.16 60)",
+                            fill: isHighlighted
+                              ? "oklch(0.62 0.18 50)"
+                              : "oklch(0.93 0.01 100)",
                             stroke: "oklch(1 0 0)",
-                            strokeWidth: 1,
+                            strokeWidth: 0.9,
                             outline: "none",
-                            cursor: "pointer",
+                            cursor: isHighlighted ? "pointer" : "default",
                           },
                           pressed: { fill, outline: "none" },
                         }}
@@ -160,148 +190,140 @@ export function IndiaImpactMap() {
               </Geographies>
             </g>
 
-            {locations.map((loc, i) => {
-              const isActive = active === loc.name;
-              return (
-                <Marker
-                  key={loc.name}
-                  coordinates={loc.coordinates}
-                  onMouseEnter={() => setActive(loc.name)}
-                  onMouseLeave={() => setActive(null)}
-                  onFocus={() => setActive(loc.name)}
-                  onBlur={() => setActive(null)}
-                  style={{
-                    default: { cursor: "pointer", outline: "none" },
-                    hover: { cursor: "pointer", outline: "none" },
-                    pressed: { cursor: "pointer", outline: "none" },
-                  }}
-                >
-                  {/* Glow halo */}
+            {/* Sparkles anchored to highlighted state centers via Marker projection */}
+            {sparkles.map((sp) => (
+              <Marker
+                key={sp.state}
+                coordinates={[sp.base[0], sp.base[1]]}
+                style={{
+                  default: { pointerEvents: "none" },
+                  hover: { pointerEvents: "none" },
+                  pressed: { pointerEvents: "none" },
+                }}
+              >
+                {sp.offsets.map((o, i) => (
                   <circle
-                    r={isActive ? 22 : 16}
-                    fill="url(#dotGlow)"
-                    style={{ transition: "r 250ms ease" }}
-                  />
-                  {/* Pulsing ring */}
-                  <circle
-                    r={6}
-                    fill="none"
-                    stroke="oklch(0.85 0.18 62 / 0.7)"
-                    strokeWidth={1.2}
+                    key={i}
+                    cx={o.dx * 6}
+                    cy={o.dy * 6}
+                    r={o.r * 1.6}
+                    fill="url(#sparkle)"
                     style={{
-                      animation: `mapPulse 2.4s ease-out ${i * 0.18}s infinite`,
-                      transformOrigin: "center",
+                      transformOrigin: `${o.dx * 6}px ${o.dy * 6}px`,
+                      animation: `sparkleFloat ${o.dur}s ease-in-out ${o.delay}s infinite`,
                     }}
                   />
-                  {/* Solid dot */}
-                  <circle
-                    r={isActive ? 5.5 : 4.5}
-                    fill="oklch(0.78 0.15 62)"
-                    stroke="oklch(1 0 0)"
-                    strokeWidth={1.2}
-                    style={{
-                      filter: "drop-shadow(0 2px 3px oklch(0 0 0 / 0.35))",
-                      transition: "r 200ms ease",
-                    }}
-                  />
-                  <text
-                    textAnchor="start"
-                    x={8}
-                    y={3}
-                    style={{
-                      fontFamily: "Inter, sans-serif",
-                      fontSize: 9,
-                      fontWeight: 600,
-                      fill: "oklch(0.22 0.04 160)",
-                      paintOrder: "stroke",
-                      stroke: "oklch(1 0 0 / 0.85)",
-                      strokeWidth: 2.5,
-                      strokeLinejoin: "round",
-                    }}
-                  >
-                    {loc.name}
-                  </text>
-                </Marker>
-              );
-            })}
+                ))}
+              </Marker>
+            ))}
+
+            {/* Head Office marker (Visakhapatnam) */}
+            <Marker coordinates={HEAD_OFFICE.coordinates}>
+              <circle r={20} fill="url(#hqGlow)" />
+              <circle
+                r={5}
+                fill="none"
+                stroke="oklch(0.7 0.22 25 / 0.85)"
+                strokeWidth={1.4}
+                style={{
+                  animation: "hqPulse 2.2s ease-out infinite",
+                  transformOrigin: "center",
+                }}
+              />
+              <circle
+                r={6}
+                fill="oklch(0.62 0.22 25)"
+                stroke="oklch(1 0 0)"
+                strokeWidth={1.5}
+                style={{ filter: "drop-shadow(0 2px 4px oklch(0 0 0 / 0.4))" }}
+              />
+              <text
+                textAnchor="middle"
+                y={-12}
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 9,
+                  fontWeight: 700,
+                  fill: "oklch(0.32 0.12 25)",
+                  paintOrder: "stroke",
+                  stroke: "oklch(1 0 0 / 0.9)",
+                  strokeWidth: 2.5,
+                  strokeLinejoin: "round",
+                }}
+              >
+                Head Office
+              </text>
+              <text
+                textAnchor="middle"
+                y={18}
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 8.5,
+                  fontWeight: 600,
+                  fill: "oklch(0.22 0.04 160)",
+                  paintOrder: "stroke",
+                  stroke: "oklch(1 0 0 / 0.9)",
+                  strokeWidth: 2.5,
+                  strokeLinejoin: "round",
+                }}
+              >
+                Visakhapatnam
+              </text>
+            </Marker>
           </ComposableMap>
 
-          {/* Hover tooltip overlay */}
-          {activeLoc && (
+          {hover && (
             <div
-              className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-2xl px-5 py-4 text-white shadow-elevated animate-fade-up"
+              className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full px-4 py-1.5 text-xs font-semibold text-white shadow-elevated animate-fade-up"
               style={{
                 background:
                   "linear-gradient(135deg, oklch(0.32 0.08 220) 0%, oklch(0.36 0.07 158) 100%)",
-                boxShadow:
-                  "0 20px 40px -16px oklch(0.32 0.08 220 / 0.55), inset 0 1px 0 0 oklch(1 0 0 / 0.18)",
-                minWidth: 240,
               }}
             >
-              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
-                GTIDS Presence
-              </div>
-              <div className="mt-1 font-display text-xl">{activeLoc.name}</div>
-              <div className="mt-3 grid grid-cols-3 gap-3 text-center">
-                <div>
-                  <div className="font-display text-lg leading-none">
-                    {activeLoc.branches}+
-                  </div>
-                  <div className="mt-1 text-[10px] uppercase tracking-wider text-white/70">
-                    Branches
-                  </div>
-                </div>
-                <div>
-                  <div className="font-display text-lg leading-none">
-                    {activeLoc.agents.toLocaleString("en-IN")}+
-                  </div>
-                  <div className="mt-1 text-[10px] uppercase tracking-wider text-white/70">
-                    Agents
-                  </div>
-                </div>
-                <div>
-                  <div className="font-display text-lg leading-none">
-                    {activeLoc.villages.toLocaleString("en-IN")}+
-                  </div>
-                  <div className="mt-1 text-[10px] uppercase tracking-wider text-white/70">
-                    Villages
-                  </div>
-                </div>
-              </div>
+              {hover} · Operational
             </div>
           )}
         </div>
 
+        {/* Legend */}
         <div className="mt-4 flex flex-col gap-3 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
-            {([
-              ["North", REGION_COLORS.north],
-              ["West", REGION_COLORS.west],
-              ["Central", REGION_COLORS.central],
-              ["East", REGION_COLORS.east],
-              ["NE", REGION_COLORS.ne],
-              ["South", REGION_COLORS.south],
-            ] as const).map(([label, color]) => (
-              <span key={label} className="flex items-center gap-1.5">
-                <span
-                  className="inline-block h-2.5 w-2.5 rounded-sm"
-                  style={{ background: color }}
-                />
-                <span>{label}</span>
-              </span>
-            ))}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            <span className="flex items-center gap-1.5">
+              <span
+                className="inline-block h-2.5 w-2.5 rounded-full"
+                style={{ background: "oklch(0.62 0.22 25)" }}
+              />
+              <span className="text-foreground font-semibold">Head Office</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span
+                className="inline-block h-2.5 w-2.5 rounded-sm"
+                style={{ background: "oklch(0.7 0.14 220)" }}
+              />
+              <span>Operational State</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span
+                className="inline-block h-2.5 w-2.5 rounded-sm border border-border"
+                style={{ background: NEUTRAL }}
+              />
+              <span>Other</span>
+            </span>
           </div>
-          <div className="font-medium text-foreground">
-            14 States · 25,000+ Villages
-          </div>
+          <div className="font-medium text-foreground">8 States · Pan-India Network</div>
         </div>
       </div>
 
       <style>{`
-        @keyframes mapPulse {
-          0%   { r: 4;  opacity: 0.9; }
-          70%  { r: 18; opacity: 0;   }
-          100% { r: 18; opacity: 0;   }
+        @keyframes hqPulse {
+          0%   { r: 5;  opacity: 0.9; }
+          70%  { r: 20; opacity: 0;   }
+          100% { r: 20; opacity: 0;   }
+        }
+        @keyframes sparkleFloat {
+          0%, 100% { opacity: 0; transform: translateY(0) scale(0.8); }
+          40%      { opacity: 1; transform: translateY(-3px) scale(1.1); }
+          70%      { opacity: 0.7; transform: translateY(-5px) scale(1); }
         }
       `}</style>
     </div>
