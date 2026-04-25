@@ -68,70 +68,91 @@ function DirectorsPage() {
         description="A team of academic, financial and development leaders steering GTIDS forward."
       />
       <section className="container-prose pb-14">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
-          {directors.map((d) => (
-            <article
-              key={d.name}
-              className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-elevated"
-            >
-              {/* Decorative banner */}
-              <div
-                aria-hidden
-                className="h-24 w-full"
-                style={{
-                  background:
-                    "linear-gradient(120deg, oklch(0.45 0.12 230) 0%, oklch(0.55 0.13 195) 50%, oklch(0.65 0.14 80) 100%)",
-                }}
-              />
+        <div className="flex flex-col gap-6">
+          {directors.map((d, i) => {
+            const isEven = i % 2 === 0;
+            return (
+              <article
+                key={d.name}
+                className="group relative overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated"
+              >
+                {/* Decorative side accent */}
+                <span
+                  aria-hidden
+                  className={`absolute top-0 ${isEven ? "left-0" : "right-0"} h-full w-1.5`}
+                  style={{
+                    background:
+                      "linear-gradient(180deg, oklch(0.45 0.12 230) 0%, oklch(0.55 0.13 195) 50%, oklch(0.65 0.14 80) 100%)",
+                  }}
+                />
+                <span
+                  aria-hidden
+                  className={`pointer-events-none absolute ${isEven ? "-right-20 -top-20" : "-left-20 -top-20"} h-56 w-56 rounded-full opacity-50 blur-3xl`}
+                  style={{
+                    background:
+                      "radial-gradient(circle, oklch(0.65 0.14 80 / 0.35), transparent 70%)",
+                  }}
+                />
 
-              {/* Photo placeholder, overlapping the banner */}
-              <div className="px-6 -mt-14 flex justify-center">
-                <div className="relative">
-                  <div
-                    className="h-28 w-28 rounded-full bg-muted ring-4 ring-card overflow-hidden shadow-elevated grid place-items-center"
-                    style={{
-                      backgroundImage: d.photo ? `url(${d.photo})` : undefined,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  >
-                    {!d.photo && (
-                      <User
-                        className="h-12 w-12 text-muted-foreground/50"
-                        strokeWidth={1.4}
-                      />
-                    )}
-                  </div>
-                  <span
-                    aria-hidden
-                    className="absolute inset-0 rounded-full pointer-events-none"
-                    style={{
-                      boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.1)",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="px-6 pt-4 pb-6 flex flex-col flex-1 text-center">
-                <h3 className="font-display text-lg text-foreground leading-tight">
-                  {d.name}
-                </h3>
-                <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">
-                  {d.role}
-                </p>
-                <p className="mt-4 text-sm text-muted-foreground leading-relaxed flex-1 text-left">
-                  {d.bio}
-                </p>
-                <a
-                  href={`mailto:${d.email}`}
-                  className="mt-5 inline-flex items-center justify-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-xs font-medium text-primary hover:bg-primary-soft/40 transition-colors"
+                <div
+                  className={`relative flex flex-col ${
+                    isEven ? "md:flex-row" : "md:flex-row-reverse"
+                  } items-center md:items-stretch gap-6 md:gap-8 p-6 md:p-8`}
                 >
-                  <Mail className="h-3.5 w-3.5" />
-                  {d.email}
-                </a>
-              </div>
-            </article>
-          ))}
+                  {/* Photo block */}
+                  <div className="shrink-0 flex md:items-center justify-center">
+                    <div className="relative">
+                      <div
+                        aria-hidden
+                        className="absolute -inset-2 rounded-3xl opacity-60 blur-md"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, oklch(0.45 0.12 230 / 0.35), oklch(0.65 0.14 80 / 0.3))",
+                        }}
+                      />
+                      <div
+                        className="relative h-36 w-36 md:h-40 md:w-40 rounded-3xl bg-muted ring-4 ring-card overflow-hidden shadow-elevated grid place-items-center"
+                        style={{
+                          backgroundImage: d.photo ? `url(${d.photo})` : undefined,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      >
+                        {!d.photo && (
+                          <User
+                            className="h-16 w-16 text-muted-foreground/50"
+                            strokeWidth={1.4}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative flex-1 flex flex-col text-center md:text-left">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
+                      {d.role}
+                    </span>
+                    <h3 className="mt-1.5 font-display text-2xl md:text-3xl text-foreground leading-tight">
+                      {d.name}
+                    </h3>
+                    <p className="mt-3 text-sm md:text-[15px] text-muted-foreground leading-relaxed">
+                      {d.bio}
+                    </p>
+                    <div className="mt-5">
+                      <a
+                        href={`mailto:${d.email}`}
+                        className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-xs font-medium text-primary hover:bg-primary-soft/40 transition-colors"
+                      >
+                        <Mail className="h-3.5 w-3.5" />
+                        {d.email}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
     </>
