@@ -14,6 +14,14 @@ import {
   Minus,
   type LucideIcon,
 } from "lucide-react";
+import financialInclusionImg from "@/assets/services/financial-inclusion.jpg";
+import dbtImg from "@/assets/services/dbt.jpg";
+import literacyImg from "@/assets/services/literacy.jpg";
+import creditImg from "@/assets/services/credit.jpg";
+import savingsImg from "@/assets/services/savings.jpg";
+import livelihoodImg from "@/assets/services/livelihood.jpg";
+import networkImg from "@/assets/services/network.jpg";
+import partnershipsImg from "@/assets/services/partnerships.jpg";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
