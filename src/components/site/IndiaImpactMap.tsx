@@ -4,8 +4,8 @@ import {
   Geographies,
   Geography,
   Marker,
-  Line,
 } from "react-simple-maps";
+import { geoMercator } from "d3-geo";
 import indiaTopo from "@/assets/geo/india.json";
 
 // Use the lighter "states" layer of the TopoJSON
