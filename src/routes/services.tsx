@@ -147,9 +147,9 @@ function ServicesPage() {
 
 function ServiceCard({ index, service }: { index: number; service: Service }) {
   const { title, short, desc, image } = service;
-  const num = String(index + 1).padStart(2, "0");
+  void index;
   return (
-    <article className="group relative overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:shadow-elevated hover:-translate-y-1.5 min-h-[300px] flex flex-col">
+    <article className="group relative overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:shadow-elevated hover:-translate-y-1.5 flex flex-col">
       {/* Full image header */}
       <div className="relative h-44 w-full overflow-hidden">
         <img
@@ -158,32 +158,16 @@ function ServiceCard({ index, service }: { index: number; service: Service }) {
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {/* subtle bottom gradient for legibility of number */}
         <span
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10"
+          className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"
         />
-        {/* Number chip */}
-        <span className="absolute top-3 left-3 rounded-full bg-card/90 backdrop-blur px-2.5 py-1 text-[11px] font-bold tracking-[0.18em] text-accent shadow-soft">
-          {num}
-        </span>
       </div>
 
       <div className="relative px-6 pt-5 pb-6 flex-1 flex flex-col">
         <h3 className="font-display text-lg text-foreground leading-snug">{title}</h3>
-        <p className="mt-2 text-sm text-muted-foreground">{short}</p>
-
-        {/* Expanded description on hover */}
-        <div
-          className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out mt-0 group-hover:mt-3"
-          aria-hidden
-        >
-          <div className="overflow-hidden">
-            <p className="text-sm text-muted-foreground leading-relaxed border-t border-border pt-3">
-              {desc}
-            </p>
-          </div>
-        </div>
+        <p className="mt-1.5 text-sm font-medium text-primary">{short}</p>
+        <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{desc}</p>
       </div>
     </article>
   );
