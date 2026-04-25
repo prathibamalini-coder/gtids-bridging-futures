@@ -128,9 +128,9 @@ function ServicesPage() {
         description="Our services go beyond basic banking access — focusing on sustained usage, economic participation, and long-term impact."
       />
 
-      {/* Desktop & tablet: Numbered card grid with hover expand */}
-      <section className="container-prose pb-8 hidden md:block">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      {/* Desktop & tablet: 2-column editorial cards */}
+      <section className="container-prose pb-12 hidden md:block">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {services.map((s, i) => (
             <ServiceCard key={s.title} index={i} service={s} />
           ))}
@@ -146,27 +146,49 @@ function ServicesPage() {
 }
 
 function ServiceCard({ index, service }: { index: number; service: Service }) {
-  const { title, short, desc, image } = service;
-  void index;
+  const { icon: Icon, title, short, desc, image, gradient } = service;
+  const num = String(index + 1).padStart(2, "0");
   return (
-    <article className="group relative overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:shadow-elevated hover:-translate-y-1.5 flex flex-col">
-      {/* Full image header */}
-      <div className="relative h-44 w-full overflow-hidden">
+    <article className="group relative grid grid-cols-[40%_1fr] overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:shadow-elevated hover:-translate-y-1 hover:border-primary/40 min-h-[260px]">
+      {/* Left: image with overlay */}
+      <div className="relative overflow-hidden">
         <img
           src={image}
           alt={title}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
         <span
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"
+          className="absolute inset-0 mix-blend-multiply opacity-70 transition-opacity duration-500 group-hover:opacity-50"
+          style={{ background: gradient }}
         />
+        <span
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-r from-transparent to-card/30"
+        />
+        {/* Number plate */}
+        <div className="absolute top-4 left-4 flex items-center gap-2">
+          <span className="font-display text-3xl font-semibold text-white drop-shadow-md">
+            {num}
+          </span>
+          <span className="h-px w-8 bg-white/70" />
+        </div>
+        {/* Icon badge */}
+        <div className="absolute bottom-4 left-4 grid h-12 w-12 place-items-center rounded-2xl bg-white/95 backdrop-blur shadow-elevated ring-1 ring-white/40 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+          <Icon className="h-5 w-5 text-primary" />
+        </div>
       </div>
 
-      <div className="relative px-6 pt-5 pb-6 flex-1 flex flex-col">
-        <h3 className="font-display text-lg text-foreground leading-snug">{title}</h3>
-        <p className="mt-1.5 text-sm font-medium text-primary">{short}</p>
+      {/* Right: content */}
+      <div className="relative flex flex-col justify-center p-6 lg:p-8">
+        <span className="text-[11px] font-bold tracking-[0.2em] text-accent uppercase">
+          {short}
+        </span>
+        <h3 className="mt-2 font-display text-xl lg:text-2xl text-foreground leading-tight">
+          {title}
+        </h3>
+        <div className="mt-3 h-px w-10 bg-gradient-to-r from-primary to-transparent" />
         <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{desc}</p>
       </div>
     </article>
