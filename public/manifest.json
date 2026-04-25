@@ -1,0 +1,83 @@
+{
+  "name": "GTIDS - Gram Tarang Inclusive Development Services",
+  "short_name": "GTIDS",
+  "description": "Driving last-mile financial inclusion and sustainable livelihoods across rural India",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#1f2937",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/logo-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-narrow.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "categories": ["business", "finance"],
+  "shortcuts": [
+    {
+      "name": "Services",
+      "short_name": "Services",
+      "description": "View our financial inclusion services",
+      "url": "/services",
+      "icons": [
+        {
+          "src": "/shortcut-services-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Impact Stories",
+      "short_name": "Impact",
+      "description": "Read stories of communities we've impacted",
+      "url": "/impact/stories",
+      "icons": [
+        {
+          "src": "/shortcut-impact-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

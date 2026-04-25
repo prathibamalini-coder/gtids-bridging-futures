@@ -31,24 +31,74 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "GTIDS — Gram Tarang Inclusive Development Services" },
+      { title: "GTIDS — Financial Inclusion & Livelihoods for Rural India" },
       {
         name: "description",
         content:
-          "GTIDS drives last-mile financial inclusion and sustainable livelihoods across rural and tribal India through a community-driven, technology-enabled ecosystem.",
+          "GTIDS drives last-mile financial inclusion and sustainable livelihoods across rural and tribal India. Operating across 14 states with 25,000+ villages. Banking access, DBT, microfinance, and financial literacy.",
       },
+      { name: "keywords", content: "financial inclusion, rural India, microfinance, DBT, financial literacy, tribal development, livelihoods" },
       { name: "author", content: "Gram Tarang Inclusive Development Services Pvt. Ltd." },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+      { httpEquiv: "x-ua-compatible", content: "IE=edge" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "GTIDS" },
+      { property: "og:title", content: "GTIDS — Financial Inclusion & Livelihoods for Rural India" },
+      {
+        property: "og:description",
+        content: "Bridging underserved communities with the formal financial ecosystem. Inclusive finance and sustainable livelihoods across rural India.",
+      },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "GTIDS — Financial Inclusion for Rural India" },
+      {
+        name: "twitter:description",
+        content: "A complete ecosystem for inclusive finance and livelihoods across 14 states.",
+      },
+      { name: "theme-color", content: "#1f2937" },
+      { name: "msapplication-TileColor", content: "#1f2937" },
+      { name: "language", content: "English" },
+      { name: "revisit-after", content: "7 days" },
+      { property: "og:locale", content: "en_IN" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "canonical", href: "https://gtids.org" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "dns-prefetch", href: "https://fonts.googleapis.com" },
+      { rel: "dns-prefetch", href: "https://fonts.gstatic.com" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap",
+      },
+      { rel: "sitemap", href: "/sitemap.xml" },
+      { rel: "manifest", href: "/manifest.json" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        innerHTML: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "GTIDS - Gram Tarang Inclusive Development Services",
+          "url": "https://gtids.org",
+          "description": "GTIDS drives last-mile financial inclusion and sustainable livelihoods across rural and tribal India through a community-driven, technology-enabled ecosystem.",
+          "foundingDate": "2011",
+          "sameAs": [
+            "https://www.facebook.com/gtids",
+            "https://www.linkedin.com/company/gtids",
+            "https://twitter.com/gtids"
+          ],
+          "areaServed": {
+            "@type": "Place",
+            "name": "Rural and Tribal India"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Service",
+            "email": "contact@gtids.org"
+          }
+        }),
       },
     ],
   }),

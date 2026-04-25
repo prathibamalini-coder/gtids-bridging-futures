@@ -1,0 +1,38 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "GTIDS - Gram Tarang Inclusive Development Services",
+  "url": "https://gtids.org",
+  "logo": "https://gtids.org/logo.png",
+  "description": "GTIDS drives last-mile financial inclusion and sustainable livelihoods across rural and tribal India through a community-driven, technology-enabled ecosystem.",
+  "foundingDate": "2011",
+  "founder": {
+    "@type": "Organization",
+    "name": "Centurion University"
+  },
+  "sameAs": [
+    "https://www.facebook.com/gtids",
+    "https://www.linkedin.com/company/gtids",
+    "https://twitter.com/gtids"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "IN",
+    "addressRegion": "India"
+  },
+  "areaServed": {
+    "@type": "Place",
+    "name": "Rural and Tribal India",
+    "description": "Operating across 14 states and 25,000+ villages"
+  },
+  "knows": {
+    "@type": "Thing",
+    "name": "Financial Inclusion",
+    "description": "Last-mile financial inclusion and sustainable livelihoods"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Service",
+    "email": "contact@gtids.org"
+  }
+}
