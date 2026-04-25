@@ -233,9 +233,6 @@ function HomePage() {
                         "linear-gradient(180deg, transparent 50%, oklch(0.18 0.04 220 / 0.55) 100%)",
                     }}
                   />
-                  <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-white/90 backdrop-blur px-2.5 py-1 text-[10px] font-bold tracking-[0.18em] text-primary">
-                    {pad(i)} · SERVICE
-                  </span>
                 </div>
 
                 {/* Content */}
@@ -243,9 +240,6 @@ function HomePage() {
                   <h3 className="font-display text-lg text-foreground leading-snug">
                     {o.title}
                   </h3>
-                  <p className="mt-2.5 text-sm text-muted-foreground leading-relaxed">
-                    {o.desc}
-                  </p>
                 </div>
               </article>
             ))}
