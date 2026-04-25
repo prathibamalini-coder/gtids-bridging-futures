@@ -49,6 +49,7 @@ interface Service {
   short: string;
   desc: string;
   gradient: string;
+  image: string;
 }
 
 const services: Service[] = [
