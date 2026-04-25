@@ -146,50 +146,31 @@ function ServicesPage() {
 }
 
 function ServiceCard({ index, service }: { index: number; service: Service }) {
-  const { icon: Icon, title, short, desc, gradient } = service;
+  const { title, short, desc, image } = service;
   const num = String(index + 1).padStart(2, "0");
   return (
     <article className="group relative overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:shadow-elevated hover:-translate-y-1.5 min-h-[300px] flex flex-col">
-      {/* Thumbnail header */}
-      <div
-        className="relative h-28 w-full overflow-hidden"
-        style={{ background: gradient }}
-      >
-        {/* decorative orbs */}
-        <span
-          aria-hidden
-          className="absolute -top-10 -right-8 h-32 w-32 rounded-full opacity-40"
-          style={{
-            background:
-              "radial-gradient(circle at 30% 30%, oklch(1 0 0 / 0.55), transparent 70%)",
-            filter: "blur(6px)",
-          }}
+      {/* Full image header */}
+      <div className="relative h-44 w-full overflow-hidden">
+        <img
+          src={image}
+          alt={title}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        {/* subtle bottom gradient for legibility of number */}
         <span
           aria-hidden
-          className="absolute -bottom-12 -left-6 h-32 w-32 rounded-full opacity-30"
-          style={{
-            background:
-              "radial-gradient(circle at 70% 70%, oklch(1 0 0 / 0.45), transparent 70%)",
-            filter: "blur(8px)",
-          }}
+          className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10"
         />
-        {/* Big faded number */}
-        <span
-          aria-hidden
-          className="absolute right-4 top-2 font-display text-[5.5rem] leading-none font-semibold text-white/15 select-none"
-        >
+        {/* Number chip */}
+        <span className="absolute top-3 left-3 rounded-full bg-card/90 backdrop-blur px-2.5 py-1 text-[11px] font-bold tracking-[0.18em] text-accent shadow-soft">
           {num}
         </span>
-        {/* Icon badge */}
-        <div className="absolute -bottom-6 left-6 grid h-14 w-14 place-items-center rounded-2xl bg-card text-foreground shadow-elevated ring-1 ring-border transition-transform group-hover:scale-110">
-          <Icon className="h-6 w-6 text-primary" />
-        </div>
       </div>
 
-      <div className="relative px-6 pt-10 pb-6 flex-1 flex flex-col">
-        <div className="text-[11px] font-bold tracking-[0.18em] text-accent">{num}</div>
-        <h3 className="mt-1 font-display text-lg text-foreground leading-snug">{title}</h3>
+      <div className="relative px-6 pt-5 pb-6 flex-1 flex flex-col">
+        <h3 className="font-display text-lg text-foreground leading-snug">{title}</h3>
         <p className="mt-2 text-sm text-muted-foreground">{short}</p>
 
         {/* Expanded description on hover */}
