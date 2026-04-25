@@ -86,6 +86,35 @@ function buildSparkles(): SparkleSeed[] {
   return list;
 }
 
+// Mercator projection matching the ComposableMap config — for parabolic SVG paths
+const projector = geoMercator()
+  .scale(950)
+  .center([82, 22])
+  .translate([300, 340]);
+
+function projectPoint(coord: [number, number]): [number, number] {
+  const p = projector(coord);
+  return p ? [p[0], p[1]] : [0, 0];
+}
+
+function buildArcPath(from: [number, number], to: [number, number], lift = 0.35): string {
+  const [x1, y1] = projectPoint(from);
+  const [x2, y2] = projectPoint(to);
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  // perpendicular vector (lifted upward for parabola)
+  const nx = -dy / (dist || 1);
+  const ny = dx / (dist || 1);
+  const cx = mx + nx * dist * lift;
+  const cy = my + ny * dist * lift;
+  // ensure arcs lift up (toward smaller y in SVG)
+  const finalCy = cy < my ? cy : my - dist * lift;
+  return `M ${x1} ${y1} Q ${mx} ${finalCy} ${x2} ${y2}`;
+}
+
 export function IndiaImpactMap() {
   const [hover, setHover] = useState<string | null>(null);
   const sparkles = useMemo(buildSparkles, []);
@@ -191,21 +220,38 @@ export function IndiaImpactMap() {
               </Geographies>
             </g>
 
-            {/* Air-connectivity routes from Head Office to each highlighted state */}
-            {Object.entries(STATE_CENTERS).map(([state, coord]) => (
-              <Line
-                key={`route-${state}`}
-                from={HEAD_OFFICE.coordinates}
-                to={coord}
-                stroke="oklch(0.62 0.22 25 / 0.7)"
-                strokeWidth={1.1}
-                strokeLinecap="round"
-                strokeDasharray="3 4"
-                style={{
-                  animation: "routeDash 1.6s linear infinite",
-                }}
-              />
-            ))}
+            {/* Parabolic air-connectivity arcs from Head Office to each highlighted state */}
+            <g style={{ pointerEvents: "none" }}>
+              {Object.entries(STATE_CENTERS).map(([state, coord]) => {
+                const d = buildArcPath(HEAD_OFFICE.coordinates, coord, 0.32);
+                return (
+                  <g key={`route-${state}`}>
+                    {/* glowing base arc */}
+                    <path
+                      d={d}
+                      fill="none"
+                      stroke="oklch(0.62 0.22 25 / 0.35)"
+                      strokeWidth={1.4}
+                      strokeLinecap="round"
+                    />
+                    {/* animated traveling dash on top */}
+                    <path
+                      d={d}
+                      fill="none"
+                      stroke="oklch(0.7 0.22 25 / 0.95)"
+                      strokeWidth={1.6}
+                      strokeLinecap="round"
+                      strokeDasharray="4 9"
+                      style={{ animation: "routeDash 1.6s linear infinite" }}
+                    />
+                    {/* moving "plane" dot tracing the arc */}
+                    <circle r={2.2} fill="oklch(1 0 0)" stroke="oklch(0.62 0.22 25)" strokeWidth={0.8}>
+                      <animateMotion dur="3.2s" repeatCount="indefinite" path={d} rotate="auto" />
+                    </circle>
+                  </g>
+                );
+              })}
+            </g>
 
             {/* State name labels on highlighted states */}
             {Object.entries(STATE_CENTERS).map(([state, coord]) => (
