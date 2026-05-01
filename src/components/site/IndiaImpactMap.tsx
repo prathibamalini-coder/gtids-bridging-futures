@@ -24,6 +24,13 @@ const HIGHLIGHTED_STATES = new Set<string>([
   "Tamil Nadu",
   "Karnataka",
   "Goa",
+  "Tripura",
+  "Meghalaya",
+  "West Bengal",
+  "Uttarakhand",
+  "Jharkhand",
+  "Uttar Pradesh",
+  "Mizoram",
 ]);
 
 const STATE_COLOR: Record<string, string> = {
@@ -35,6 +42,13 @@ const STATE_COLOR: Record<string, string> = {
   "Tamil Nadu": "oklch(0.7 0.14 15)",
   Karnataka: "oklch(0.72 0.13 175)",
   Goa: "oklch(0.78 0.14 70)",
+  Tripura: "oklch(0.7 0.14 120)",
+  Meghalaya: "oklch(0.72 0.13 195)",
+  "West Bengal": "oklch(0.7 0.14 320)",
+  Uttarakhand: "oklch(0.74 0.13 50)",
+  Jharkhand: "oklch(0.7 0.13 290)",
+  "Uttar Pradesh": "oklch(0.72 0.13 100)",
+  Mizoram: "oklch(0.7 0.14 245)",
 };
 
 const NEUTRAL = "oklch(0.96 0.005 100)";
@@ -61,6 +75,13 @@ const STATE_CENTERS: Record<string, [number, number]> = {
   "Tamil Nadu": [78.6, 11.1],
   Karnataka: [76.0, 14.5],
   Goa: [74.0, 15.4],
+  Tripura: [91.7, 23.7],
+  Meghalaya: [91.3, 25.5],
+  "West Bengal": [87.8, 23.5],
+  Uttarakhand: [79.0, 30.0],
+  Jharkhand: [85.3, 23.6],
+  "Uttar Pradesh": [80.9, 26.8],
+  Mizoram: [92.9, 23.3],
 };
 
 function rand(seed: number) {
@@ -120,7 +141,7 @@ export function IndiaImpactMap() {
   const sparkles = useMemo(buildSparkles, []);
 
   return (
-    <div className="relative mx-auto w-full max-w-3xl">
+    <div className="relative mx-auto w-full max-w-5xl">
       {/* soft 3D platform shadow */}
       <div
         aria-hidden
@@ -145,7 +166,7 @@ export function IndiaImpactMap() {
             Operational Presence
           </span>
           <h3 className="mt-1 font-display text-xl md:text-2xl text-foreground">
-            8 States · Headquartered in Visakhapatnam
+            15 States · Headquartered in Visakhapatnam
           </h3>
         </div>
 
@@ -402,7 +423,7 @@ export function IndiaImpactMap() {
               <span>Other</span>
             </span>
           </div>
-          <div className="font-medium text-foreground">8 States · Pan-India Network</div>
+          <div className="font-medium text-foreground">15 States · Pan-India Network</div>
         </div>
       </div>
 

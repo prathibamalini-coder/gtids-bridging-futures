@@ -173,11 +173,12 @@ function HomePage() {
               Where We Work
             </span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl text-foreground text-balance">
-              Operational across 8 states.
+              Operational across 15 states.
             </h2>
             <p className="mt-3 text-muted-foreground">
               Headquartered in Visakhapatnam, with active operations in Odisha, Bihar, Assam,
-              Andhra Pradesh, Telangana, Tamil Nadu, Karnataka and Goa.
+              Andhra Pradesh, Telangana, Tamil Nadu, Karnataka, Goa, Tripura, Meghalaya,
+              West Bengal, Uttarakhand, Jharkhand, Uttar Pradesh and Mizoram.
             </p>
           </div>
           <IndiaImpactMap />
@@ -199,7 +200,7 @@ function HomePage() {
         <div className="container-prose relative">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-              Our 8 Services
+              Our Services
             </span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl text-foreground text-balance">
               A complete suite for inclusive growth
