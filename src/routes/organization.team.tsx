@@ -31,12 +31,11 @@ interface Member {
 const team: Member[] = [
   { name: "Tapan Panda", role: "Business Development Head, GTIDS", email: "tapan.panda@gramtarang.org" },
   { name: "Kalyan Chakravarthy", role: "IT Director, GTIDS", email: "kalyan@gramtarang.org" },
-  { name: "K. Rajeswari", role: "IT Manager, GTIDS", email: "krajeswari@gramtarang.org" },
   { name: "Padmana Kumar Kulesika", role: "HR Manager, GTIDS", email: "padmanakumar.kulesika@gramtarang.org" },
   { name: "Suresh", role: "Accounts Manager, GTIDS", email: "suresh@gramtarang.org" },
   {
     name: "Jannana Rambabu",
-    role: "Project Director – APGVB (AP & Telangana)",
+    role: "APGVB (AP & Telangana)",
     email: "rambabu.pream@gmail.com",
     phone: "8500101963",
   },
@@ -45,12 +44,6 @@ const team: Member[] = [
     role: "MIS Senior Manager – Andhra Bank, TGB, APGVB & BOI",
     email: "msrraju001@gmail.com",
     phone: "9040709061",
-  },
-  {
-    name: "Sasanam Chalapathi",
-    role: "Technical Manager – Andhra Bank Operations (Odisha Regions). Technical support for Maestros & Visiontek devices across Gajapati, Ganjam, and Malkangiri districts.",
-    email: "schalapati3366@gmail.com",
-    phone: "8658282605",
   },
   { name: "Amit Kumar", role: "MIS Head", email: "amit.kumar@gramtarang.org", phone: "8902757574" },
 ];

@@ -10,6 +10,7 @@ import {
   Briefcase,
   Network,
   Building2,
+  ShieldCheck,
   Plus,
   Minus,
   type LucideIcon,
@@ -115,6 +116,14 @@ const services: Service[] = [
     short: "Scaling through collaboration",
     desc: "We work closely with public sector banks, government agencies, and development institutions to deliver scalable and sustainable solutions for inclusive growth.",
     gradient: "linear-gradient(135deg, oklch(0.55 0.13 145) 0%, oklch(0.42 0.11 180) 100%)",
+    image: partnershipsImg,
+  },
+  {
+    icon: ShieldCheck,
+    title: "Social Security Scheme – 1 Card (SSS)",
+    short: "One card · full social security",
+    desc: "A unified social security card initiative that consolidates access to government welfare entitlements — pensions, insurance and benefit schemes — into a single, easy-to-use card for rural and tribal households.",
+    gradient: "linear-gradient(135deg, oklch(0.6 0.16 25) 0%, oklch(0.45 0.14 50) 100%)",
     image: partnershipsImg,
   },
 ];
