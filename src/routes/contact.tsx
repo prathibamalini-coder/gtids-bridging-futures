@@ -56,7 +56,7 @@ function ContactPage() {
                 </span>
                 <div className="text-muted-foreground">
                   <div className="font-medium text-foreground">Phone</div>
-                  <a href="tel:+91" className="hover:text-primary">+91-XXXXXXXXXX</a>
+                  <a href="tel:+91" className="hover:text-primary">+91 93488 65447</a>
                 </div>
               </div>
               <div className="flex gap-4">

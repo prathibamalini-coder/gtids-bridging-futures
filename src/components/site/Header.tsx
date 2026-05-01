@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 type NavItem =
   | { label: string; to: string }
@@ -58,7 +59,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+    <header className="sticky top-0 z-50 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="container-prose flex h-16 items-center justify-between gap-4">
         <Link
           to="/"
@@ -68,9 +69,11 @@ export function Header() {
             setOpenMenu(null);
           }}
         >
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground font-display text-lg font-semibold shadow-soft">
-            G
-          </span>
+          <img
+            src={logoImg}
+            alt="GTIDS logo"
+            className="h-16 w-16 rounded-lg object-contain"
+          />
           <span className="hidden sm:flex flex-col leading-tight">
             <span className="font-display text-base font-semibold tracking-tight text-foreground">
               GTIDS
@@ -161,7 +164,7 @@ export function Header() {
 
       {/* Mobile nav */}
       {open && (
-        <div className="lg:hidden border-t border-border bg-background">
+        <div className="lg:hidden bg-background">
           <nav className="container-prose flex flex-col py-2">
             {nav.map((item) => {
               if ("to" in item) {
@@ -172,7 +175,7 @@ export function Header() {
                     onClick={() => setOpen(false)}
                     activeProps={{ className: "text-primary" }}
                     activeOptions={{ exact: item.to === "/" }}
-                    className="px-2 py-3 text-sm font-medium text-foreground border-b border-border/60"
+                    className="px-2 py-3 text-sm font-medium text-foreground"
                   >
                     {item.label}
                   </Link>

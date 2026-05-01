@@ -42,7 +42,7 @@ export function Footer() {
         <div className="lg:col-span-4">
           <Link to="/" className="inline-flex items-center gap-3 group">
             <div
-              className="grid h-14 w-14 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15 backdrop-blur-sm overflow-hidden shadow-elevated transition-transform group-hover:scale-105"
+              className="grid h-14 w-14 place-items-center rounded-2xl bg-white ring-1 ring-white/15 backdrop-blur-sm overflow-hidden shadow-elevated transition-transform group-hover:scale-105"
             >
               <img
                 src={logo}
@@ -143,7 +143,7 @@ export function Footer() {
         <div className="container-prose py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/60">
           <p>© {new Date().getFullYear()} Gram Tarang Inclusive Development Services Pvt. Ltd.</p>
           <p className="inline-flex items-center gap-1.5">
-            Made with <Heart className="h-3.5 w-3.5 text-accent fill-accent" /> for rural India · An outreach initiative of CUTM
+            <a href="https://sparvixainnovations.com/">Designed and Developed by Sparvixa Innovations</a>
           </p>
         </div>
       </div>
