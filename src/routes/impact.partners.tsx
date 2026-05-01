@@ -1,6 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/site/PageHero";
 import { Landmark, Building2, GraduationCap } from "lucide-react";
+import apgvbLogo from "@/assets/partners/APGVB.png";
+import cboiLogo from "@/assets/partners/cboi.png";
+import iciciLogo from "@/assets/partners/ICICI_Bank_Logo.png";
+import iobLogo from "@/assets/partners/ios logo.jpg";
+import sbiLogo from "@/assets/partners/sbi_banklogo.png";
+import tgbLogo from "@/assets/partners/TGB.webp";
+import tngbLogo from "@/assets/partners/Tngb.webp";
+import unionBankLogo from "@/assets/partners/union-bank_New.png";
 
 export const Route = createFileRoute("/impact/partners")({
   head: () => ({
@@ -25,6 +33,7 @@ interface Partner {
   name: string;
   short: string;
   desc: string;
+  logo?: string;
 }
 
 const banks: Partner[] = [
@@ -32,26 +41,49 @@ const banks: Partner[] = [
     name: "State Bank of India (SBI)",
     short: "SBI",
     desc: "India's largest public sector bank — partnering with GTIDS to extend banking to rural and tribal populations.",
+    logo: sbiLogo,
   },
   {
     name: "Andhra Pragathi Grameena Bank",
     short: "APGB",
     desc: "Regional rural bank serving Andhra Pradesh — collaborating on accounts, DBT and credit linkages.",
+    logo: apgvbLogo,
   },
   {
     name: "Tamil Nadu Grameena Bank",
     short: "TNGB",
     desc: "Tamil Nadu's regional rural bank — extending doorstep banking through the GTIDS Bank Mitra network.",
+    logo: tngbLogo,
+  },
+  {
+    name: "Telangana Grameena Bank",
+    short: "TGB",
+    desc: "A regional partner strengthening rural banking outreach across Telangana.",
+    logo: tgbLogo,
   },
   {
     name: "Central Bank of India",
     short: "CBI",
     desc: "A trusted public sector partner enabling savings, credit and welfare delivery in underserved geographies.",
+    logo: cboiLogo,
   },
   {
     name: "Indian Overseas Bank",
     short: "IOB",
     desc: "Driving formal banking access in rural communities through joint outreach and last-mile services.",
+    logo: iobLogo,
+  },
+  {
+    name: "Union Bank of India",
+    short: "UBI",
+    desc: "A strong public sector partner helping deepen financial access and payments infrastructure in rural markets.",
+    logo: unionBankLogo,
+  },
+  {
+    name: "ICICI Bank",
+    short: "ICICI",
+    desc: "A major financial partner supporting digital banking reach and credit access in rural districts.",
+    logo: iciciLogo,
   },
 ];
 
@@ -67,20 +99,6 @@ const institutions: Partner[] = [
     desc: "Working with welfare departments and DBT programmes to deliver entitlements transparently.",
   },
 ];
-
-function Logo({ short }: { short: string }) {
-  return (
-    <div
-      className="grid h-16 w-16 place-items-center rounded-2xl text-white font-display text-base font-semibold shrink-0"
-      style={{
-        background: "linear-gradient(135deg, oklch(0.45 0.12 230) 0%, oklch(0.36 0.07 158) 100%)",
-        boxShadow: "0 8px 18px -6px oklch(0.36 0.07 158 / 0.5), inset 0 1px 0 0 oklch(1 0 0 / 0.25)",
-      }}
-    >
-      {short}
-    </div>
-  );
-}
 
 function PartnersPage() {
   return (
@@ -102,11 +120,22 @@ function PartnersPage() {
               key={p.name}
               className="rounded-2xl border border-border bg-card p-6 shadow-soft transition-all hover:-translate-y-1 hover:shadow-elevated"
             >
-              <div className="flex items-center gap-4">
-                <Logo short={p.short} />
-                <h3 className="font-display text-base text-foreground leading-tight">{p.name}</h3>
+              <div className="flex flex-col items-center gap-4 text-center">
+                {/* <div className="flex h-28 w-28 items-center justify-center rounded-3xl bg-muted ring-1 ring-border overflow-hidden"> */}
+                  <img
+                    src={p.logo}
+                    alt={`${p.name} logo`}
+                    loading="lazy"
+                    className="max-h-20 w-auto object-contain"
+                  />
+                {/* </div> */}
+                <h3 className="font-display text-lg text-foreground leading-tight">
+                  {p.name}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {p.desc}
+                </p>
               </div>
-              <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
             </article>
           ))}
         </div>
