@@ -22,8 +22,31 @@ export const Route = createFileRoute("/grievance")({
   component: GrievancePage,
 });
 
+const RECIPIENT = "aswinikumar@cutmap.ac.in";
+
 function GrievancePage() {
   const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const subject = `Grievance from ${formData.name}`;
+    const body =
+      `Name: ${formData.name}\n` +
+      `Email: ${formData.email}\n\n` +
+      `Grievance:\n${formData.message}`;
+    window.location.href = `mailto:${RECIPIENT}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+    setSubmitted(true);
+  };
 
   return (
     <>
@@ -50,25 +73,57 @@ function GrievancePage() {
             <div className="mt-8 rounded-xl bg-primary-soft/60 p-6 text-center">
               <div className="font-display text-lg text-primary">Received</div>
               <p className="mt-1 text-sm text-muted-foreground">
-                Thank you. Your grievance has been logged and our team will reach out shortly.
+                Your email client should have opened with your grievance. If not, please email us directly at {RECIPIENT}.
               </p>
+              <button
+                type="button"
+                onClick={() => setSubmitted(false)}
+                className="mt-4 text-sm text-primary underline"
+              >
+                Submit another
+              </button>
             </div>
           ) : (
-            <form
-              className="mt-6 grid gap-5"
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSubmitted(true);
-              }}
-            >
-              <Field label="Name" name="name" required />
-              <Field label="Email" name="email" type="email" required />
+            <form className="mt-6 grid gap-5" onSubmit={handleSubmit}>
               <div>
-                <label className="text-sm font-medium text-foreground">Message</label>
+                <label htmlFor="g-name" className="text-sm font-medium text-foreground">
+                  Name <span className="text-accent">*</span>
+                </label>
+                <input
+                  id="g-name"
+                  name="name"
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring/40"
+                />
+              </div>
+              <div>
+                <label htmlFor="g-email" className="text-sm font-medium text-foreground">
+                  Email <span className="text-accent">*</span>
+                </label>
+                <input
+                  id="g-email"
+                  name="email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring/40"
+                />
+              </div>
+              <div>
+                <label htmlFor="g-message" className="text-sm font-medium text-foreground">
+                  Message <span className="text-accent">*</span>
+                </label>
                 <textarea
+                  id="g-message"
                   name="message"
                   rows={6}
                   required
+                  value={formData.message}
+                  onChange={handleChange}
                   className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring/40"
                   placeholder="Describe your grievance in detail…"
                 />
@@ -84,31 +139,5 @@ function GrievancePage() {
         </div>
       </section>
     </>
-  );
-}
-
-function Field({
-  label,
-  name,
-  type = "text",
-  required,
-}: {
-  label: string;
-  name: string;
-  type?: string;
-  required?: boolean;
-}) {
-  return (
-    <div>
-      <label className="text-sm font-medium text-foreground">
-        {label} {required && <span className="text-accent">*</span>}
-      </label>
-      <input
-        name={name}
-        type={type}
-        required={required}
-        className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring/40"
-      />
-    </div>
   );
 }

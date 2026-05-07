@@ -22,8 +22,40 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
+const RECIPIENT = "aswinikumar@cutmap.ac.in";
+
 function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    org: "",
+    message: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const subject = `New contact from ${formData.name}`;
+    const body =
+      `Full name: ${formData.name}\n` +
+      `Email: ${formData.email}\n` +
+      `Phone: ${formData.phone}\n` +
+      `Organization: ${formData.org}\n\n` +
+      `Message:\n${formData.message}`;
+    const mailto = `mailto:${RECIPIENT}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+    setSubmitted(true);
+  };
 
   return (
     <>
@@ -33,7 +65,6 @@ function ContactPage() {
         description="Whether you are a partner, beneficiary, institution, or individual looking to collaborate, our team is here to assist you."
       />
       <section className="container-prose pb-12 grid lg:grid-cols-5 gap-8">
-        {/* Contact info */}
         <div className="lg:col-span-2 space-y-6">
           <div className="rounded-2xl border border-border bg-card p-7 shadow-soft">
             <h3 className="font-display text-xl text-foreground">Corporate Office</h3>
@@ -56,7 +87,7 @@ function ContactPage() {
                 </span>
                 <div className="text-muted-foreground">
                   <div className="font-medium text-foreground">Phone</div>
-                  <a href="tel:+91" className="hover:text-primary">+91 93488 65447</a>
+                  <a href="tel:+919348865447" className="hover:text-primary">+91 93488 65447</a>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -90,7 +121,6 @@ function ContactPage() {
           </div>
         </div>
 
-        {/* Form */}
         <div className="lg:col-span-3">
           <div className="rounded-2xl border border-border bg-card p-7 md:p-9 shadow-soft">
             <h3 className="font-display text-2xl text-foreground">Send us a message</h3>
@@ -102,31 +132,83 @@ function ContactPage() {
               <div className="mt-8 rounded-xl bg-primary-soft/60 p-6 text-center">
                 <div className="font-display text-lg text-primary">Thank you!</div>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Your message has been received. Our team will reach out soon.
+                  Your email client should have opened with your message. If not, please email us directly at {RECIPIENT}.
                 </p>
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(false)}
+                  className="mt-4 text-sm text-primary underline"
+                >
+                  Send another message
+                </button>
               </div>
             ) : (
-              <form
-                className="mt-6 grid gap-5"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSubmitted(true);
-                }}
-              >
+              <form className="mt-6 grid gap-5" onSubmit={handleSubmit}>
                 <div className="grid sm:grid-cols-2 gap-5">
-                  <Field label="Full name" name="name" required />
-                  <Field label="Email" name="email" type="email" required />
+                  <div>
+                    <label htmlFor="name" className="text-sm font-medium text-foreground">
+                      Full name <span className="text-accent">*</span>
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring/40"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="text-sm font-medium text-foreground">
+                      Email <span className="text-accent">*</span>
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring/40"
+                    />
+                  </div>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-5">
-                  <Field label="Phone" name="phone" type="tel" />
-                  <Field label="Organization" name="org" />
+                  <div>
+                    <label htmlFor="phone" className="text-sm font-medium text-foreground">Phone</label>
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring/40"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="org" className="text-sm font-medium text-foreground">Organization</label>
+                    <input
+                      id="org"
+                      name="org"
+                      type="text"
+                      value={formData.org}
+                      onChange={handleChange}
+                      className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring/40"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground">Message</label>
+                  <label htmlFor="message" className="text-sm font-medium text-foreground">
+                    Message <span className="text-accent">*</span>
+                  </label>
                   <textarea
+                    id="message"
                     name="message"
                     rows={5}
                     required
+                    value={formData.message}
+                    onChange={handleChange}
                     className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring/40"
                     placeholder="Tell us how we can help…"
                   />
@@ -143,31 +225,5 @@ function ContactPage() {
         </div>
       </section>
     </>
-  );
-}
-
-function Field({
-  label,
-  name,
-  type = "text",
-  required,
-}: {
-  label: string;
-  name: string;
-  type?: string;
-  required?: boolean;
-}) {
-  return (
-    <div>
-      <label className="text-sm font-medium text-foreground">
-        {label} {required && <span className="text-accent">*</span>}
-      </label>
-      <input
-        name={name}
-        type={type}
-        required={required}
-        className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring/40"
-      />
-    </div>
   );
 }
